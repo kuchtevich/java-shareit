@@ -4,9 +4,7 @@ import lombok.Data;
 
 import java.net.http.HttpHeaders;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @Data
 public class Item {
     private long id;
