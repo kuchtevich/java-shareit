@@ -1,13 +1,19 @@
 package ru.practicum.shareit.item.dto;
-import ru.practicum.shareit.item.model.Item;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.request.model.ItemRequest;
 
+@Data
+@EqualsAndHashCode(exclude = {"id"})
 public class ItemDto {
-    public static ItemDto toItemDTO(Item item) {
-        return new ItemDto(
-                item.getName(),
-                item.getDescription(),
-                item.isAvailable,
-                item.getRequest() != null ? item.getRequest().getId() : null
-        );
-    }
+        @NotNull(message = "Указать id")
+        private long id;
+        @NotNull(message = "Указать имя пользователя")
+        private String name;
+        @NotNull(message = "Указать подробное описание вещи")
+        private String description; //подробное описание вещи
+        @NotNull(message = "Указать статус вещи")
+        private Boolean available; //статус
+        private ItemRequest request; //ссылка на соотв. запрос
 }

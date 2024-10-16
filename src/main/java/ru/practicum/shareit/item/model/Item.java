@@ -1,16 +1,22 @@
 package ru.practicum.shareit.item.model;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.net.http.HttpHeaders;
+import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.request.model.ItemRequest;
 
 
 @Data
+@EqualsAndHashCode(exclude = {"id"})
 public class Item {
+    @NotNull(message = "Указать id")
     private long id;
+    @NotNull(message = "Указать имя пользователя")
     private String name;
+    @NotNull(message = "Указать подробное описание вещи")
     private String description; //подробное описание вещи
-    private String available; //статус
-    private HttpHeaders request; //ссылка на соотв. запрос
+    @NotNull(message = "Указать статус вещи")
+    private Boolean available; //статус
+    private ItemRequest request; //ссылка на соотв. запрос
 
 }
