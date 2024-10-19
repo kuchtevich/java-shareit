@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(exclude = {"id"})
 public class UserDto {
-    private long id;
+    private Long id;
     @NotBlank(message = "Необходимо указать имя пользователя.")
     private String name;
     @NotNull(message = "Необходимо указать почтовый адресс.")

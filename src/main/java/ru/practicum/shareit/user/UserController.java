@@ -26,26 +26,22 @@ public class UserController {
     }
 
 
-@GetMapping("/{userId}")
-public UserDto getUserById(@PathVariable @Positive final long userId) {
-    return userService.getUserById(userId);
-}
 
 @PostMapping()
 @ResponseStatus(HttpStatus.CREATED)
-public UserDto userCreate(@Valid @RequestBody final UserDto userDto) {
-    return userService.userCreate(userDto);
+public UserDto createUser(@Valid @RequestBody final UserDto userDto) {
+    return userService.createUser(userDto);
 }
 
 @PatchMapping("/{userId}")
 public UserDto userUpdate(@PathVariable @Positive final long userId, @RequestBody UserDto userDto) {
-    return userService.userUpdate(userId, userDto);
+    return userService.updateUser(userId, userDto);
 }
 
 
 @DeleteMapping("/{userId}")
 @ResponseStatus(HttpStatus.NO_CONTENT)
-public void userDelete(@PathVariable @Positive final Long userId) {
-    userService.userDelete(userId);
+public void deleteUser(@PathVariable @Positive final Long userId) {
+    userService.deleteUser(userId);
 }
 }
