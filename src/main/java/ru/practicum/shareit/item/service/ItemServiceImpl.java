@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+
 import java.util.List;
 
 @Slf4j
@@ -25,9 +26,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto create(Long userId, ItemDto itemDto) {
         User user;
-        if(userRepository.get(userId).isPresent()) {
+        if (userRepository.get(userId).isPresent()) {
             user = userRepository.get(userId).get();
-        }else {
+        } else {
             throw new NotFoundException("Пользователь не найден");
         }
         Item item = ItemMapper.toItem(user, itemDto);

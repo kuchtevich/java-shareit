@@ -30,7 +30,7 @@ public class ItemController {
 
 
     @PostMapping
-    public ItemDto create(@RequestHeader("X-Sharer-User-Id") Long userId,@Valid @RequestBody ItemDto itemDto) {
+    public ItemDto create(@RequestHeader("X-Sharer-User-Id") Long userId, @Valid @RequestBody ItemDto itemDto) {
         log.info("Получили данные для создания предмета {} у пользователя по id {}", itemDto, userId);
         return itemService.create(userId, itemDto);
     }
