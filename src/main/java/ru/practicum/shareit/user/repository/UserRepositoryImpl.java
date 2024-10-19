@@ -1,12 +1,16 @@
 package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.error.NotFoundException;
+import ru.practicum.shareit.error.RequestConflictException;
 import ru.practicum.shareit.user.model.User;
+
 
 import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
+
     private final Map<Long, User> users = new HashMap<>();
 
     private final Set<String> emails = new HashSet<>();
@@ -23,8 +27,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User update(User user) {
-        User updateUser = users.get(user.getId());
+    public User update(Long userId,User user) {
+        User updateUser = users.get(userId);
+
         if (user.getName() != null) {
             updateUser.setName(user.getName());
         }
@@ -68,4 +73,3 @@ public class UserRepositoryImpl implements UserRepository {
         return counter++;
     }
 }
-

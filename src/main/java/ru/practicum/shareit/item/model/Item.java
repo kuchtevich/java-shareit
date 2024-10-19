@@ -1,22 +1,17 @@
 package ru.practicum.shareit.item.model;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import ru.practicum.shareit.request.model.ItemRequest;
-
+import ru.practicum.shareit.user.model.User;
 
 @Data
 @EqualsAndHashCode(exclude = {"id"})
+@AllArgsConstructor
 public class Item {
-    @NotNull(message = "Указать id")
-    private long id;
-    @NotNull(message = "Указать имя пользователя")
+    private Long id;
     private String name;
-    @NotNull(message = "Указать подробное описание вещи")
-    private String description; //подробное описание вещи
-    @NotNull(message = "Указать статус вещи")
-    private Boolean available; //статус
-    private ItemRequest request; //ссылка на соотв. запрос
-
+    private String description;
+    private Boolean available;
+    private User owner;
 }

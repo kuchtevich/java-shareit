@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.error.NotFoundException;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -16,30 +17,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.getAll().stream().map(UserMapper::toUserDto).toList();
     }
 
-@Override
+    @Override
     public UserDto createUser(UserDto userDto) {
-    User user = UserMapper.toUser(userDto);
-    return UserMapper.toUserDto(userRepository.save(user));
-}
-
-@Override
-public UserDto updateUser(long userId, UserDto userDto) {
-    User user = userRepository.findById(id).orElseThrow(() ->
-            new NotFoundException("Пользователя нет"));
-    if (userDtoUpdate.getName() != null) {
-        user.setName(userDtoUpdate.getName());
+        User user = UserMapper.toUser(userDto);
+        return UserMapper.toUserDto(userRepository.create(user));
     }
-    if (userDtoUpdate.getEmail() != null) {
-        user.setEmail(userDtoUpdate.getEmail());
-    }
-    return UserMapper.toUserDto(userRepository.save(user));
-}
 
-@Override
-public void deleteUser(Long userId) {
-    userRepository.deleteById(id);
-}
+    @Override
+    public UserDto updateUser(Long userId, UserDto userDto) {
+        userRepository.get(userId).orElseThrow(() ->
+                new NotFoundException("Пользователя нет"));
+        User user = UserMapper.toUser(userDto);
+        return UserMapper.toUserDto(userRepository.update(userId, user));
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        userRepository.delete(userId);
+    }
+
+    @Override
+    public UserDto getUser(Long userId) {
+        User user = userRepository.get(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
+        return UserMapper.toUserDto(user);
+    }
 }

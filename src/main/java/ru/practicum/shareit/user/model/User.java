@@ -1,16 +1,14 @@
 package ru.practicum.shareit.user.model;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(exclude = {"id"})
+@AllArgsConstructor
 public class User {
     private Long id;
-    @NotBlank(message = "Необходимо указать имя пользователя.")
     private String name;
-    @NotNull(message = "Необходимо указать почтовый адресс.")
     private String email;
 }
