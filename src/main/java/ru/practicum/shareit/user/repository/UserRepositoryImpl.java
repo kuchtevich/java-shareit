@@ -34,8 +34,8 @@ public class UserRepositoryImpl implements UserRepository {
             updateUser.setName(user.getName());
         }
         if (user.getEmail() != null) {
-            checkEmail(user);
             emails.remove(updateUser.getEmail());
+            checkEmail(user);
             updateUser.setEmail(user.getEmail());
             emails.add(updateUser.getEmail());
         }
