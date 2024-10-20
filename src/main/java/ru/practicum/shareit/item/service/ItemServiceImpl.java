@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,20 +26,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto create(Long userId, ItemDto itemDto) {
-        User user;
-        if (userRepository.get(userId).isPresent()) {
-            user = userRepository.get(userId).get();
-        } else {
-            throw new NotFoundException("Пользователь не найден");
-        }
+        User user = getUserById(userId);
         Item item = ItemMapper.toItem(user, itemDto);
         return ItemMapper.toItemDto(itemRepository.create(item));
     }
 
     @Override
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
-        User user = userRepository.get(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
-        Item item = itemRepository.get(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
+        User user = getUserById(userId);
+        Item item = getItemById(itemId);
         if (!item.getOwner().getId().equals(user.getId())) {
             throw new NotFoundException("Не является хозяином");
         }
@@ -50,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getById(Long itemId) {
-        Item item = itemRepository.get(itemId).orElseThrow(() -> new NotFoundException("Такой вещи нет"));
+        Item item = getItemById(itemId);
         return ItemMapper.toItemDto(item);
     }
 
@@ -61,8 +57,21 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> search(String query) {
-        return itemRepository.search(query).stream()
+        if (query.isBlank() || query.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return itemRepository.search(query)
+                .stream()
                 .map(ItemMapper::toItemDto)
                 .toList();
     }
+
+    private User getUserById(Long userId) {
+        return userRepository.get(userId).orElseThrow(() -> new NotFoundException("Пользователя c id " + userId + " нет"));
+    }
+
+    private Item getItemById(Long itemId) {
+        return itemRepository.get(itemId).orElseThrow(() -> new NotFoundException("Вещи с id " + itemId + " нет"));
+    }
+
 }

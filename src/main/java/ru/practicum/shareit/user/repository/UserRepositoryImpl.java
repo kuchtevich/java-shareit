@@ -27,7 +27,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User update(Long userId,User user) {
+    public User update(Long userId, User user) {
         User updateUser = users.get(userId);
 
         if (user.getName() != null) {
@@ -51,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void delete(Long id) {
         if (users.get(id) == null) {
-            throw new NotFoundException("Пользователь не найден");
+            throw new NotFoundException("Пользователя с id " + id + " нет");
         }
         emails.remove(users.get(id).getEmail());
         users.remove(id);

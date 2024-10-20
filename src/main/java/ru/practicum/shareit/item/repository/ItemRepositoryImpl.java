@@ -63,10 +63,8 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<Item> search(String query) {
-        if (query.isBlank() || query.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return items.values().stream()
+        return items.values()
+                .stream()
                 .filter(Item::getAvailable)
                 .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase()) ||
                         item.getDescription().toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList());
