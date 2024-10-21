@@ -1,15 +1,22 @@
 package ru.practicum.shareit.item.dto;
-import ru.practicum.shareit.item.model.Item;
-/**
- * TODO Sprint add-controllers.
- */
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.validation.annotation.Validated;
+
+
+@Data
+@EqualsAndHashCode(exclude = {"id"})
+@Validated
 public class ItemDto {
-    public static ItemDto toItemDTO(Item item) {
-        return new ItemDto(
-                item.getName(),
-                item.getDescription(),
-                item.isAvailable,
-                item.getRequest() != null ? item.getRequest().getId() : null
-        );
-    }
+        private Long id;
+        @NotNull
+        @NotBlank
+        private String name;
+        @NotNull(message = "Указать подробное описание вещи")
+        private String description; //подробное описание вещи
+        @NotNull(message = "Указать статус вещи")
+        private Boolean available;
 }
