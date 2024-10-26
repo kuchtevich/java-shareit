@@ -2,10 +2,12 @@ package ru.practicum.shareit.booking.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import ru.practicum.shareit.item.model.Item;
 
 import java.time.LocalDate;
 
+@Data
 public class BookingDto {
     @NotNull(message = "Указать id.")
     private long id;
