@@ -15,6 +15,7 @@ import ru.practicum.shareit.user.model.User;
 @EqualsAndHashCode(exclude = {"id"})
 @AllArgsConstructor
 public class Item {
+    @Column(name = "item_id")
     @Id
     private Long id;
     @Column(name = "item_name")

@@ -12,17 +12,18 @@ import java.time.LocalDateTime;
 @Table(name = "bookings")
 @EqualsAndHashCode(exclude = {"id"})
 public class Booking {
+    @Column(name = "booking_id")
     @Id
     private long id;
-    @Column(name = "start")
+    @Column(name = "booking_start")
     private LocalDateTime start;
-    @Column(name = "end")
+    @Column(name = "booking_end")
     private LocalDateTime end;
-    @Column(name = "item")
+    @Column(name = "item_id")
     private Item item; //вещь которую бронируют
-    @Column(name = "booker")
+    @Column(name = "booker_id")
     private User booker; //пользователь который забронировал
     @Enumerated(EnumType.STRING)
-    @Column(name = "booker")
+    @Column(name = "status")
     private Status status; //WAITING, APPROVED, REJECTED, CANCELED
 }
