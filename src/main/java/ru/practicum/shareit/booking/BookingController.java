@@ -1,9 +1,48 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.booking.dto.BookingDto;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "/bookings")
 public class BookingController {
+    private BookingService bookingService;
+
+    @PostMapping
+    public BookingDto create(@RequestHeader("X-Sharer-User-Id") Long userId, @Valid @RequestBody BookingDto bookingDto) {
+        return bookingService.create(userId, bookingDto);
+    }
+
+    @PatchMapping("/{bookingId}")
+    public BookingDto approval(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long bookingId,
+                               @RequestParam Boolean approved
+    ) {
+        return bookingService.approval(userId, bookingId, approved);
+    }
+
+    @GetMapping("/{bookingId}")
+    public BookingDto getById(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long bookingId, @RequestParam Boolean approved) {
+        return bookingService.getById(userId, bookingId, approved);
+    }
+
+    @GetMapping
+    public Collection<BookingDto> getAllBookingFromUser(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam(defaultValue = "ALL") Status status
+    ) {
+        return bookingService.getAllBookingFromUser(userId, status);
+    }
+
+    @GetMapping("/owner")
+    public Collection<BookingDto> getAllBookingFromOwner(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
+            @RequestParam(defaultValue = "ALL") Status status
+    ) {
+        return bookingService.getAllBookingFromOwner(userId, status);
+    }
 }

@@ -17,12 +17,12 @@ import ru.practicum.shareit.user.model.User;
 public class Item {
     @Id
     private Long id;
-    @Column(name = "name")
+    @Column(name = "item_name")
     private String name;
     @Column(name = "description")
     private String description;
-    @Column(name = "available")
+    @Column(name = "is_available")
     private Boolean available;
-    @Column(name = "owner")
+    @Column(name = "owner_id")
     private User owner;
 }

@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,32 +17,40 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<UserDto> getAllUsers() {
-        return userRepository.getAll().stream().map(UserMapper::toUserDto).toList();
-    }
-
-    @Override
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(userRepository.create(user));
+        User user1 = userRepository.save(user);
+        return UserMapper.toUserDto(user1);
     }
 
     @Override
-    public UserDto updateUser(Long userId, UserDto userDto) {
-        userRepository.get(userId).orElseThrow(() ->
+    public UserDto updateUser(Long id, UserDto userDtoUpdate) {
+        User user = userRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Пользователя нет"));
-        User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(userRepository.update(userId, user));
+        if (userDtoUpdate.getName() != null) {
+            user.setName(userDtoUpdate.getName());
+        }
+        if (userDtoUpdate.getEmail() != null) {
+            user.setEmail(userDtoUpdate.getEmail());
+        }
+        return UserMapper.toUserDto(userRepository.save(user));
     }
 
     @Override
-    public void deleteUser(Long userId) {
-        userRepository.delete(userId);
-    }
-
-    @Override
-    public UserDto getUser(Long userId) {
-        User user = userRepository.get(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
+    public UserDto getUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Пользователя нет")
+        );
         return UserMapper.toUserDto(user);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 }
