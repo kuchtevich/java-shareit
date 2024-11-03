@@ -1,25 +1,22 @@
 package ru.practicum.shareit.request.model;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDate;
 
 @Data
-@EqualsAndHashCode(exclude = {"id"})
+@Entity
+@Table(name = "requests")
 public class ItemRequest {
-    @NotNull(message = "Указать id")
-    @Column(name = "request_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotNull(message = "Указать описание")
-    @Column(name = "description")
-    private  String  description;
-    @Column(name = "requestor_id")
+    @Column(name = "description", nullable = false)
+    private String description;
+    @JoinColumn(name = "requestor_id", nullable = false)
     private User requestor; //пользователь создавший запрос
-    @Column(name = "created")
-    @NotNull(message = "Указать время")
+    @Column(name = "created", nullable = false)
     private LocalDate created;
 }

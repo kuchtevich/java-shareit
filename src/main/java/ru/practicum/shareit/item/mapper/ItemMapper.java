@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.mapper;
 
-import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemBookingInfoDto;
 import ru.practicum.shareit.item.model.Item;
@@ -8,33 +7,51 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class ItemMapper {
-    public static ItemDto toItemDto(Item item) {
+    public ItemDto toItemDto(Item item) {
         ItemDto itemDto = new ItemDto();
+
         itemDto.setId(item.getId());
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
+
         return itemDto;
     }
 
-    public static Item toItem(User user, ItemDto itemDto) {
-        return new Item(itemDto.getId(),
-                itemDto.getName(),
-                itemDto.getDescription(),
-                itemDto.getAvailable(),
-                user);
+    public Item toItem(User user, ItemDto itemDto) {
+        Item item = new Item();
+
+        item.setName(itemDto.getName());
+        item.setDescription(itemDto.getDescription());
+        item.setOwner(user);
+        item.setAvailable(itemDto.getAvailable());
+
+        return item;
     }
 
-    public static ItemBookingInfoDto toItemBookingInfoDto(Item item, Booking lastBooking, Booking nextBooking, List<CommentDto> comments) {
-        return new ItemBookingInfoDto(item.getId(),
-                item.getName(),
-                item.getDescription(),
-                item.getAvailable(),
-                comments,
-                lastBooking,
-                nextBooking)
-                ;
+    public List<ItemDto> toListDto(Iterable<Item> items) {
+        List<ItemDto> result = new ArrayList<>();
+
+        for (Item item : items) {
+            result.add(toItemDto(item));
+        }
+
+        return result;
+    }
+
+    public ItemBookingInfoDto toItemBookingInfoDto(Item item, List<CommentDto> comments) {
+
+        final ItemBookingInfoDto itemBookingInfoDto = new ItemBookingInfoDto();
+
+        itemBookingInfoDto.setId(item.getId());
+        itemBookingInfoDto.setName(item.getName());
+        itemBookingInfoDto.setDescription(item.getDescription());
+        itemBookingInfoDto.setAvailable(item.getAvailable());
+        itemBookingInfoDto.setComments(comments);
+
+        return itemBookingInfoDto;
     }
 }

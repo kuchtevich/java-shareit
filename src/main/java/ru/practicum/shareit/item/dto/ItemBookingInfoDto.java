@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Booking;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class ItemBookingInfoDto {
     private String name;
     private String description;
     private Boolean available;
-    private List<CommentDto> comments;
+    private List<CommentDto> comments = new ArrayList<>();
     private Booking lastBooking;
     private Booking nextBooking;
 }

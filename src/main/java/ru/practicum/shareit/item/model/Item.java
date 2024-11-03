@@ -1,29 +1,25 @@
 package ru.practicum.shareit.item.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 @Data
 @Entity
 @Table(name = "items")
-@EqualsAndHashCode(exclude = {"id"})
-@AllArgsConstructor
 public class Item {
     @Column(name = "item_id")
     @Id
     private Long id;
-    @Column(name = "item_name")
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "is_available")
+    @Column(name = "available", nullable = false)
     private Boolean available;
-    @Column(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
 }

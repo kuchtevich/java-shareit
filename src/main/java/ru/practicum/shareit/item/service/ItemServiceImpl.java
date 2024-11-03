@@ -34,114 +34,95 @@ public class ItemServiceImpl implements ItemService {
 
     private final CommentRepository commentRepository;
 
+    private final ItemMapper itemMapper;
+
+
     @Override
     public ItemDto create(Long userId, ItemDto itemDto) {
-        User owner = userRepository.findById(userId).orElseThrow(() ->
+        User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователя нет")
         );
 
-        Item item = ItemMapper.toItem(owner, itemDto);
+        Item item = ItemMapper.toItem(user, itemDto);
         return ItemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
-        User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
 
-        if (itemDto.getName() != null) {
+        if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
             item.setName(itemDto.getName());
         }
 
-        if (itemDto.getDescription() != null) {
+        if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
             item.setDescription(itemDto.getDescription());
         }
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }
-        item.setId(itemId);
-        return ItemMapper.toItemDto(itemRepository.save(item));
+        //item.setId(itemId);
+        return itemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
-    public ItemBookingInfoDto get(Long itemId) {
+    public ItemBookingInfoDto get(Long userId, Long itemId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException("Пользователя нет.");
+        }
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
-        List<Comment> comments = commentRepository.findAllByItemId(itemId);
-        List<CommentDto> commentsDto = comments.stream().map(CommentMapper::toCommentDto).toList();
-        List<Booking> itemBookings = bookingRepository.findAllByItemIdAndEndBefore(itemId, LocalDateTime.now());
-        Booking lastBooking = getLastBooking(itemBookings);
-        Booking nextBooking = getNextBooking(itemBookings);
-        ItemBookingInfoDto itemBookingInfoDto = ItemMapper.toItemBookingInfoDto(item, lastBooking, nextBooking, commentsDto);
-        return itemBookingInfoDto;
+        List<CommentDto> commentsDto = commentRepository.findAllByItemId(itemId).steam().map(comment
+                -> commentMapper.toCommentDto(comment)).collect(Collectors.toList());
+        ItemBookingInfoDto itemBookingInfoDtot = itemMapper.toItemBookingInfoDto(item, commentsDto);
+        if ((Objects.equals(item.getOwner().getId(), userId))) {
+            Optional<Booking> last = bookingRepository.findTopByItemIdAndEndBeforeAndStatusInOrderByEndDesc(itemId,
+                    LocalDateTime.now(), List.of(BookingStatus.APPROVED));
+            itemBookingInfoDtot.setLastBooking(last == null ? null : last.get().getEnd());
+
+            Optional<Booking> future = bookingRepository.findTopByItemIdAndStartAfterAndStatusInOrderByStartAsc(itemId,
+                    LocalDateTime.now(), List.of(BookingStatus.APPROVED));
+            itemBookingInfoDtot.setNextBooking(future == null ? null : future.get().getStart());
+        }
+
+        return itemBookingInfoDtot;
     }
 
     @Override
-    public List<ItemBookingInfoDto> getOwnerItems(Long ownerId) {
-        List<Item> ownerItems = itemRepository.findAllByOwnerId(ownerId);
-        List<Long> itemsIds = ownerItems.stream().map(Item::getId).toList();
-        List<Booking> bookings = bookingRepository.findByItemIdInAndEndAfter(itemsIds, LocalDateTime.now());
-        List<Comment> allItemsComments = commentRepository.findByItemIdIn(itemsIds);
-        Map<Long, List<Booking>> bookingsMapByItemsId = new HashMap<>();
-        Map<Long, List<Comment>> commentsMapByItemsID = new HashMap<>();
-        for (Booking booking : bookings) {
-            bookingsMapByItemsId.computeIfAbsent(booking.getItem().getId(), k -> new ArrayList<>()).add(booking);
+    public List<ItemDto> getOwnerItems(Long userId) {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new NotFoundException("Пользователя нет.");
         }
-        for (Comment comment : allItemsComments) {
-            commentsMapByItemsID.computeIfAbsent(comment.getItem().getId(), c -> new ArrayList<>()).add(comment);
-        }
-        List<ItemBookingInfoDto> itemBookingInfoDto = new ArrayList<>();
-
-        for (Item item : ownerItems) {
-            List<CommentDto> commentDto = commentsMapByItemsID.getOrDefault(item.getId(), new ArrayList<>())
-                    .stream().map(CommentMapper::toCommentDto).toList();
-            List<Booking> itemBookings = bookingsMapByItemsId.getOrDefault(item.getId(), new ArrayList<>());
-            Booking lastBooking = getLastBooking(itemBookings);
-            Booking nextBooking = getNextBooking(itemBookings);
-            ItemBookingInfoDto infoDto = ItemMapper.toItemBookingInfoDto(item, lastBooking, nextBooking, commentDto);
-            itemBookingInfoDto.add(infoDto);
-        }
-        return itemBookingInfoDto;
+        List<Item> items = itemRepository.findAllByOwnerId(userId);
+        return itemMapper.toListDto(items);
     }
 
     @Override
     public CommentDto addComment(Long userId, Long itemId, CommentDto commentDto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
+        User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
         Comment comment = CommentMapper.toComment(commentDto, item, user);
-        List<Booking> booking = bookingRepository.getByBookerIdStatePast(comment.getAuthor().getId(), LocalDateTime.now());
+        List<Booking> booking = bookingRepository.findAllByBookerIdAndItemIdAndStatusEqualsAndEndIsBefore(userId, itemId,
+                BookingStatus.APPROVED, LocalDateTime.now());
         if (booking.isEmpty()) {
             throw new BadRequestException("Нет бронирований");
         }
-        comment.setCreated(LocalDateTime.now());
         commentRepository.save(comment);
         return CommentMapper.toCommentDto(comment);
     }
 
     @Override
-    public List<ItemDto> search(String query) {
-        if (query.isBlank()) {
-            return Collections.emptyList();
+    public List<ItemDto> search(String text) {
+        if (text.isEmpty()) {
+            return new ArrayList<>();
         }
-        return itemRepository.searchAvailableByText(query).stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
+        return itemRepository.itemSearch(text.trim().toLowerCase()).stream().map(itemMapper::toItemDto).toList();;
     }
 
-    private Booking getLastBooking(List<Booking> bookings) {
-        if (bookings.isEmpty() || bookings.size() == 1) {
-            return null;
-        }
-        Optional<Booking> lastBooking = bookings.stream()
-                .filter(booking -> booking.getStart() != null)
-                .max(Comparator.comparing(Booking::getStart));
-        return lastBooking.orElse(null);
-    }
 
-    private Booking getNextBooking(List<Booking> bookings) {
-        if (bookings.isEmpty() || bookings.size() == 1) {
-            return null;
-        }
-        Optional<Booking> lastBooking = bookings.stream()
-                .filter(booking -> booking.getEnd() != null)
-                .max(Comparator.comparing(Booking::getEnd));
-        return lastBooking.orElse(null);
+
+    private void delete(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
+        itemRepository.delete(item);
     }
 }

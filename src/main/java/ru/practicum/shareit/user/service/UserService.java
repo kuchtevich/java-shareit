@@ -12,5 +12,5 @@ public interface UserService {
 
     void deleteUser(final Long userId);
 
-    UserDto getUser(final Long userId);
+    UserDto getUser(final Long userId); //получение пользователя по id
 }

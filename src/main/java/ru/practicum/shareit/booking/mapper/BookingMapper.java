@@ -6,39 +6,34 @@ import ru.practicum.shareit.booking.dto.BookingDtoTime;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 public class BookingMapper {
-    public static Booking toBooking(BookingDto bookingDto, User user, Item item) {
+
+    public Booking toBooking(BookingDto bookingDto, User user, Item item) {
         Booking booking = new Booking();
-        booking.setId(item.getId());
-        booking.setEnd(bookingDto.getEnd());
+
         booking.setStart(bookingDto.getStart());
+        booking.setEnd(bookingDto.getEnd());
         booking.setItem(item);
         booking.setBooker(user);
         booking.setStatus(Status.WAITING);
+
         return booking;
     }
 
-    public static BookingDto toBookingDto(Booking booking) {
-        return new BookingDto(
-                booking.getId(),
-                booking.getStart(),
-                booking.getEnd(),
-                booking.getItem().getId(),
-                booking.getBooker().getId(),
-                booking.getStatus()
-        );
-    }
+    public BookingDtoTime toBookingDtoTime(Booking booking, UserDto userDto, ItemDto itemDto) {
 
+        final BookingDtoTime bookingDtoTime = new BookingDtoTime();
 
-    public static BookingDtoTime bookingDtoTime(Booking booking) {
-        BookingDtoTime bookingDtoTime = new BookingDtoTime();
-        bookingDtoTime.setBooker(booking.getBooker().getId());
-        bookingDtoTime.setStatus(booking.getStatus());
-        bookingDtoTime.setEnd(booking.getEnd());
-        bookingDtoTime.setStart(booking.getStart());
-        bookingDtoTime.setItem(booking.getItem().getId());
         bookingDtoTime.setId(booking.getId());
+        bookingDtoTime.setBooker(userDto);
+        bookingDtoTime.setItem(itemDto);
+        bookingDtoTime.setStart(booking.getStart());
+        bookingDtoTime.setEnd(booking.getEnd());
+        bookingDtoTime.setStatus(booking.getStatus());
+
         return bookingDtoTime;
     }
 }

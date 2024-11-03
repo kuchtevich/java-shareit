@@ -9,9 +9,6 @@ import lombok.EqualsAndHashCode;
 import org.springframework.validation.annotation.Validated;
 
 @Data
-@EqualsAndHashCode(exclude = {"id"})
-@AllArgsConstructor
-@Validated
 public class UserDto {
     private Long id;
     @NotBlank(message = "Необходимо указать имя пользователя.")

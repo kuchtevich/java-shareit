@@ -9,18 +9,20 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = UserMapper.toUser(userDto);
-        User user1 = userRepository.save(user);
-        return UserMapper.toUserDto(user1);
+        if (userRepository.findAll().contains(userMapper.toUser(userDto))) {
+            throw new DuplicatedDataException("Этот пользователь уже существует.");
+        }
+        final User user = userRepository.save(userMapper.toUser(userDto));
+        return userMapper.toUserDto(user);
     }
 
     @Override
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService {
         if (userDtoUpdate.getEmail() != null) {
             user.setEmail(userDtoUpdate.getEmail());
         }
-        return UserMapper.toUserDto(userRepository.save(user));
+        return UserMapper.toUserDto(update);
     }
 
     @Override
@@ -46,11 +48,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователя нет"));
+        userRepository.delete(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+        List<User> users = userRepository.findAll();
+        return userMapper.toListDto(users);
     }
 }
