@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.item.model.Item;
 import java.time.LocalDateTime;
@@ -10,20 +9,18 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "bookings")
-@EqualsAndHashCode(exclude = {"id"})
 public class Booking {
-    @Column(name = "booking_id")
     @Id
     private long id;
-    @Column(name = "booking_start")
+    @Column(name = "booking_start", nullable = false)
     private LocalDateTime start;
-    @Column(name = "booking_end")
+    @Column(name = "booking_end", nullable = false)
     private LocalDateTime end;
-    @Column(name = "item_id")
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item; //вещь которую бронируют
-    @Column(name = "booker_id")
+    @JoinColumn(name = "booker_id", nullable = false)
     private User booker; //пользователь который забронировал
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private Status status; //WAITING, APPROVED, REJECTED, CANCELED
 }

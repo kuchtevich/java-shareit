@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemBookingInfoDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.dto.CommentDto;
 
 import java.util.List;
 
@@ -19,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
-
     private final ItemService itemService;
 
 
@@ -34,7 +34,7 @@ public class ItemController {
     public ItemBookingInfoDto getById(@RequestHeader("X-Sharer-User-Id") final Integer userId,
                                       @PathVariable @Positive final long itemId) {
         log.info("Получен запрос на вывод у пользователя по id {} по предмета id {}", userId, itemId);
-        return itemService.get(userId, itemId);
+        return itemService.getById(userId, itemId);
     }
 
 

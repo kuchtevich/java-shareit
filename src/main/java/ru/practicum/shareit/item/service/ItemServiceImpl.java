@@ -61,12 +61,11 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }
-        //item.setId(itemId);
         return itemMapper.toItemDto(itemRepository.save(item));
     }
 
     @Override
-    public ItemBookingInfoDto get(Long userId, Long itemId) {
+    public ItemBookingInfoDto getById(Long userId, Long itemId) {
         if (userRepository.findById(userId).isEmpty()) {
             throw new NotFoundException("Пользователя нет.");
         }
@@ -115,11 +114,12 @@ public class ItemServiceImpl implements ItemService {
         if (text.isEmpty()) {
             return new ArrayList<>();
         }
-        return itemRepository.itemSearch(text.trim().toLowerCase()).stream().map(itemMapper::toItemDto).toList();;
+        return itemRepository.itemSearch(text.trim().toLowerCase()).stream().map(itemMapper::toItemDto).toList();
+        ;
     }
 
 
-
+    @Override
     private void delete(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
