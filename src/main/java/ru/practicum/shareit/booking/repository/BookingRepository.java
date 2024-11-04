@@ -11,18 +11,8 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    @Query("SELECT b FROM Booking b " +
-            "WHERE b.item.id = :itemId AND " +
-            "((b.start <= :end) AND (b.end >= :start))")
-    List<Booking> findByItemIdAndIntersection(Long itemId, LocalDateTime start, LocalDateTime end);
-
-    List<Booking> findAllByItemIdAndEndBefore(Long itemId, LocalDateTime time);
-
-    List<Booking> getAllByItemOwnerIdOrderByStartDesc(Long userId);
-
-    List<Booking> getAllByItemOwnerIdAndStatus(Long ownerId, Status status);
-
-    List<Booking> getByBookerIdAndStatus(Long bookerId, Status status);
+    @Query("SELECT b FROM Booking b JOIN b.item i ON b.item = i WHERE b.id = :bookingId AND i.owner.id = :userId ")
+    Optional<Booking> findByIdAndOwnerId(final long bookingId, final long userId);
 
     List<Booking> findAllByBookerId(final long userId, Sort sort);
 

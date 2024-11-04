@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.mapper;
 
+import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemBookingInfoDto;
 import ru.practicum.shareit.item.model.Item;
@@ -9,8 +10,9 @@ import ru.practicum.shareit.user.model.User;
 import java.util.List;
 import java.util.ArrayList;
 
+@Component
 public class ItemMapper {
-    public ItemDto toItemDto(Item item) {
+    public ItemDto toItemDto(final Item item) {
         ItemDto itemDto = new ItemDto();
 
         itemDto.setId(item.getId());
@@ -21,7 +23,7 @@ public class ItemMapper {
         return itemDto;
     }
 
-    public Item toItem(User user, ItemDto itemDto) {
+    public Item toItem(final User user, final ItemDto itemDto) {
         Item item = new Item();
 
         item.setName(itemDto.getName());
@@ -42,7 +44,7 @@ public class ItemMapper {
         return result;
     }
 
-    public ItemBookingInfoDto toItemBookingInfoDto(Item item, List<CommentDto> comments) {
+    public ItemBookingInfoDto toItemBookingInfoDto(final Item item, List<CommentDto> comments) {
 
         final ItemBookingInfoDto itemBookingInfoDto = new ItemBookingInfoDto();
 

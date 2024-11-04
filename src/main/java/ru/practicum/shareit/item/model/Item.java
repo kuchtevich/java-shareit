@@ -9,7 +9,6 @@ import ru.practicum.shareit.user.model.User;
 @Entity
 @Table(name = "items")
 public class Item {
-    @Column(name = "item_id")
     @Id
     private Long id;
     @Column(name = "name", nullable = false)

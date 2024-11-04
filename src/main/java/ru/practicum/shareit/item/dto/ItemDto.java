@@ -6,10 +6,9 @@ import lombok.Data;;
 
 
 @Data
-
 public class ItemDto {
         private Long id;
-        @NotBlank
+        @NotBlank(message = "Указать имя.")
         private String name;
         @NotNull(message = "Указать подробное описание вещи")
         private String description;

@@ -49,7 +49,7 @@ public class ItemController {
     @GetMapping
     public List<ItemDto> getOwnerItems(@RequestHeader("X-Sharer-User-Id") @Positive Long userId) {
         log.info("Получаем список предметов по юзеру с id {}", userId);
-        return itemService.getOwnerItems(userId);
+        return itemService.getAllItems(userId);
     }
 
     @GetMapping("/search")
