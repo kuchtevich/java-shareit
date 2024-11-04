@@ -22,11 +22,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-
     private final BookingRepository bookingRepository;
-
     private final UserRepository userRepository;
-
     private final ItemRepository itemRepository;
 
     @Override
@@ -37,7 +34,6 @@ public class BookingServiceImpl implements BookingService {
         if (!item.getAvailable()) {
             throw new ValidationException("Неправильный статус");
         }
-
         Booking booking = BookingMapper.toBooking(bookingDto, user, item);
         booking.setStatus(Status.WAITING);
         bookingRepository.save(booking);
