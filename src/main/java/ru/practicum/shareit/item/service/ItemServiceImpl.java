@@ -42,9 +42,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto create(final long userId, final ItemDto itemDto) {
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new NotFoundException("Пользователя нет.");
-        }
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new NotFoundException("Пользователя нет")
         );
@@ -79,13 +76,13 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemBookingInfoDto getById(final long userId, final long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
-        List<CommentDto> commentsDto = commentRepository.findAllByItemId(itemId).steam().map(comment
-                -> commentMapper.toCommentDto(comment)).collect(Collectors.toList());
-        ItemBookingInfoDto itemBookingInfoDtot = itemMapper.toItemBookingInfoDto(item, commentsDto);
+        List<CommentDto> commentsDto = commentRepository.findAllByItemId(itemId).stream()
+                .map(comment -> commentMapper.toCommentDto(comment)).collect(Collectors.toList());
+        ItemBookingInfoDto itemBookingInfoDto = itemMapper.toItemBookingInfoDto(item, commentsDto);
         if ((Objects.equals(item.getOwner().getId(), userId))) {
             Optional<Booking> last = bookingRepository.findTopByItemIdAndEndBeforeAndStatusInOrderByEndDesc(itemId,
                     LocalDateTime.now(), List.of(Status.APPROVED));
-            ItemBookingInfoDto.setLastBooking(last == null ? null : last.get().getEnd());
+            itemBookingInfoDto.setLastBooking(last == null ? null : last.get().getEnd());
 
             Optional<Booking> future = bookingRepository.findTopByItemIdAndStartAfterAndStatusInOrderByStartAsc(itemId,
                     LocalDateTime.now(), List.of(Status.APPROVED));
@@ -108,7 +105,6 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComments(final long userId, final long itemId, final CommentDto commentDto) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
-        Comment comment = CommentMapper.toComment(commentDto, item, owner);
         if (bookingRepository.findAllByBookerIdAndItemIdAndStatusEqualsAndEndIsBefore(userId, itemId,
                 Status.APPROVED, LocalDateTime.now()).isEmpty()) {
             throw new BadRequestException("Нет бронирований");

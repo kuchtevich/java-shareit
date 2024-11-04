@@ -39,21 +39,21 @@ public class ItemController {
 
 
     @PatchMapping("/{item-id}")
-    public ItemDto update(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
-                          @PathVariable @Positive Long itemId,
-                          @RequestBody ItemDto itemDto) {
+    public ItemDto update(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
+                          @PathVariable @Positive final long itemId,
+                          @RequestBody final ItemDto itemDto) {
         log.info("Переданы данные на редактировние предмета по id: {}, пользователя по id: {}, данные {}", userId, itemId, itemDto);
         return itemService.update(userId, itemId, itemDto);
     }
 
     @GetMapping
-    public List<ItemDto> getOwnerItems(@RequestHeader("X-Sharer-User-Id") @Positive Long userId) {
+    public List<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") @Positive final long userId) {
         log.info("Получаем список предметов по юзеру с id {}", userId);
         return itemService.getAllItems(userId);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam String text) {
+    public List<ItemDto> search(@RequestParam final String text) {
         log.info("Получили данные для поиска {}", text);
         return itemService.search(text);
     }
