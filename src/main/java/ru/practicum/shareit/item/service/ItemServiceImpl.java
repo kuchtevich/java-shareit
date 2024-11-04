@@ -84,12 +84,12 @@ public class ItemServiceImpl implements ItemService {
         ItemBookingInfoDto itemBookingInfoDtot = itemMapper.toItemBookingInfoDto(item, commentsDto);
         if ((Objects.equals(item.getOwner().getId(), userId))) {
             Optional<Booking> last = bookingRepository.findTopByItemIdAndEndBeforeAndStatusInOrderByEndDesc(itemId,
-                    LocalDateTime.now(), List.of(BookingStatus.APPROVED));
-            itemBookingInfoDto.setLastBooking(last == null ? null : last.get().getEnd());
+                    LocalDateTime.now(), List.of(Status.APPROVED));
+            ItemBookingInfoDto.setLastBooking(last == null ? null : last.get().getEnd());
 
             Optional<Booking> future = bookingRepository.findTopByItemIdAndStartAfterAndStatusInOrderByStartAsc(itemId,
-                    LocalDateTime.now(), List.of(BookingStatus.APPROVED));
-            itemBookingInfoDtot.setNextBooking(future == null ? null : future.get().getStart());
+                    LocalDateTime.now(), List.of(Status.APPROVED));
+            itemBookingInfoDto.setNextBooking(future == null ? null : future.get().getStart());
         }
 
         return itemBookingInfoDtot;
@@ -108,9 +108,9 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComments(final long userId, final long itemId, final CommentDto commentDto) {
         User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
-        Comment comment = CommentMapper.toComment(commentDto, item, user);
+        Comment comment = CommentMapper.toComment(commentDto, item, owner);
         if (bookingRepository.findAllByBookerIdAndItemIdAndStatusEqualsAndEndIsBefore(userId, itemId,
-                BookingStatus.APPROVED, LocalDateTime.now()).isEmpty()) {
+                Status.APPROVED, LocalDateTime.now()).isEmpty()) {
             throw new BadRequestException("Нет бронирований");
         }
         final Comment comment = commentMapper.toComment(commentDto, owner, item);
@@ -123,13 +123,13 @@ public class ItemServiceImpl implements ItemService {
         if (text.isEmpty()) {
             return new ArrayList<>();
         }
-        return itemRepository.itemSearch(text.trim().toLowerCase()).stream().map(itemMapper::toItemDto).toList();
+        return itemRepository.search(text.trim().toLowerCase()).stream().map(itemMapper::toItemDto).toList();
 
     }
 
 
     @Override
-    private void delete(final long itemId) {
+    private void delete(final Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
         itemRepository.delete(item);

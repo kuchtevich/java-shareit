@@ -7,13 +7,13 @@ import ru.practicum.shareit.booking.model.Status;
 import java.util.Collection;
 
 public interface BookingService {
-    BookingDto create(final Long userId, BookingDtoTime bookingDtoTime);
+    BookingDtoTime create(final Long userId, BookingDto bookingDto);
 
-    BookingDto approval(final Long userId, final Long bookingId, final Boolean approved);
+    BookingDtoTime approval(final Long userId, final Long bookingId, final Boolean approved);
 
     BookingDto getById(final Long userId, final Long bookingId);
 
-    Collection<BookingDto> getAllBookingFromUser(final Long userId, final Status status);
+    Collection<BookingDtoTime> getAllBookingFromUser(final Long userId, final Status status);
 
     Collection<BookingDto> getAllBookingFromOwner(final Long userId, final Status status);
 
