@@ -11,9 +11,9 @@ public interface BookingService {
 
     BookingDtoTime approval(final Long userId, final Long bookingId, final Boolean approved);
 
-    BookingDto getById(final Long userId, final Long bookingId);
+    BookingDtoTime getById(final Long userId, final Long bookingId);
 
-    Collection<BookingDto> getAllBookingFromUser(final Long userId, final Status status);
+    Collection<BookingDtoTime> getAllBookingFromUser(final Long userId, final Status status);
 
     Collection<BookingDtoTime> getAllBookingFromOwner(final Long userId, final Status status);
 

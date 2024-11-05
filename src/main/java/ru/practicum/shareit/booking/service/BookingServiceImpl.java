@@ -67,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto getById(final Long userId, Long bookingId) {
+    public BookingDtoTime getById(final Long userId, Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new NotFoundException("бронирование не найдено"));
         if (!Objects.equals(booking.getItem().getOwner().getId(), userId)
                 && !Objects.equals(booking.getBooker().getId(), userId)) {
@@ -78,7 +78,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Collection<BookingDto> getAllBookingFromUser(final Long userId, final Status status) {
+    public Collection<BookingDtoTime> getAllBookingFromUser(final Long userId, final Status status) {
         userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         LocalDateTime time = LocalDateTime.now();
         List<Booking> bookings;
@@ -104,8 +104,10 @@ public class BookingServiceImpl implements BookingService {
             default:
                 throw new IllegalArgumentException("Ошибка состояния");
         }
-        return bookings.stream().map(booking -> bookingMapper.toBookingDtoTime(booking,
-                userMapper.toUserDto(booking.getBooker()), itemMapper.toItemDto(booking.getItem()))).collect(Collectors.toList());
+        return bookings.stream()
+                .map(booking -> bookingMapper.toBookingDtoTime(booking,
+                        userMapper.toUserDto(booking.getBooker()), itemMapper.toItemDto(booking.getItem())))
+                .collect(Collectors.toList());
     }
 
     @Override

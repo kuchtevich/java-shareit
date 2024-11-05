@@ -27,12 +27,12 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDto getById(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long bookingId) {
+    public BookingDtoTime getById(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable Long bookingId) {
         return bookingService.getById(userId, bookingId);
     }
 
     @GetMapping
-    public Collection<BookingDto> getAllBookingFromUser(
+    public Collection<BookingDtoTime> getAllBookingFromUser(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(defaultValue = "ALL") Status status
     ) {
