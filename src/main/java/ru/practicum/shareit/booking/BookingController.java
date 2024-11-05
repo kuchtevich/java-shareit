@@ -32,7 +32,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public Collection<BookingDtoTime> getAllBookingFromUser(
+    public Collection<BookingDto> getAllBookingFromUser(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(defaultValue = "ALL") Status status
     ) {
@@ -40,7 +40,7 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    public Collection<BookingDto> getAllBookingFromOwner(
+    public Collection<BookingDtoTime> getAllBookingFromOwner(
             @RequestHeader("X-Sharer-User-Id") Long userId,
             @RequestParam(defaultValue = "ALL") Status status
     ) {

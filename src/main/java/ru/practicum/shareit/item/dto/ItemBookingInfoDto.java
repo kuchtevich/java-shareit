@@ -1,13 +1,16 @@
 package ru.practicum.shareit.item.dto;
 
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 import ru.practicum.shareit.booking.model.Booking;
 
 import java.util.List;
 import java.util.ArrayList;
 
 
-@Data
+@Setter
+@Getter
 public class ItemBookingInfoDto {
     private Long id;
     private String name;

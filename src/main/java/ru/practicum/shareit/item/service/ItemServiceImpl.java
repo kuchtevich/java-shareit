@@ -18,6 +18,7 @@ import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.booking.model.Status;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -89,7 +90,7 @@ public class ItemServiceImpl implements ItemService {
             itemBookingInfoDto.setNextBooking(future == null ? null : future.get().getStart());
         }
 
-        return itemBookingInfoDtot;
+        return itemBookingInfoDto;
     }
 
     @Override
@@ -125,7 +126,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    private void delete(final Long itemId) {
+    public void delete(final Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
         itemRepository.delete(item);
