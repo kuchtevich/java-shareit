@@ -30,7 +30,7 @@ public class ItemController {
         return itemService.create(userId, itemDto);
     }
 
-    @GetMapping("/{item-id}")
+    @GetMapping("/{itemid}")
     public ItemBookingInfoDto getById(@RequestHeader("X-Sharer-User-Id") final Integer userId,
                                       @PathVariable @Positive final long itemId) {
         log.info("Получен запрос на вывод у пользователя по id {} по предмета id {}", userId, itemId);
@@ -38,7 +38,7 @@ public class ItemController {
     }
 
 
-    @PatchMapping("/{item-id}")
+    @PatchMapping("/{itemid}")
     public ItemDto update(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
                           @PathVariable @Positive final long itemId,
                           @RequestBody final ItemDto itemDto) {

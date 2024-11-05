@@ -11,11 +11,13 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping(path = "/bookings")
+@RequiredArgsConstructor
+@Validated
 public class BookingController {
-    private BookingService bookingService;
+    private final BookingService bookingService;
 
     @PostMapping
-    public BookingDtoTime create(@RequestHeader("X-Sharer-User-Id") Long userId, @Valid @RequestBody BookingDto bookingDto) {
+    public BookingDtoTime create(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody BookingDto bookingDto) {
         return bookingService.create(userId, bookingDto);
     }
 

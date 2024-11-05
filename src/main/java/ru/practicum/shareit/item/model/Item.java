@@ -10,15 +10,19 @@ import ru.practicum.shareit.user.model.User;
 @Table(name = "items")
 public class Item {
     @Id
+    @Column(name = "item_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", nullable = false)
+    @Column(name = "item_name", nullable = false)
     private String name;
     @Column(name = "description", nullable = false)
     private String description;
-    @Column(name = "available", nullable = false)
+    @Column(name = "is_available", nullable = false)
     private Boolean available;
     @JoinColumn(name = "owner_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User owner;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     private ItemRequest request;
 }
