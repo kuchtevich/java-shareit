@@ -3,10 +3,9 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.shareit.booking.model.Booking;
-
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 
 @Setter
@@ -18,6 +17,6 @@ public class ItemBookingInfoDto {
     private Boolean available;
     private String ownerName;
     private List<CommentDto> comments = new ArrayList<>();
-    private Booking lastBooking;
-    private Booking nextBooking;
+    private LocalDateTime lastBooking;
+    private LocalDateTime nextBooking;
 }
