@@ -105,8 +105,7 @@ public class BookingServiceImpl implements BookingService {
                 throw new IllegalArgumentException("Ошибка состояния");
         }
         return bookings.stream().map(booking -> bookingMapper.toBookingDtoTime(booking,
-                userMapper.toUserDto(booking.getBooker()), itemMapper.toItemDto(booking.getItem())))
-                .collect(Collectors.toList());
+                userMapper.toUserDto(booking.getBooker()), itemMapper.toItemDto(booking.getItem()))).collect(Collectors.toList());
     }
 
     @Override
