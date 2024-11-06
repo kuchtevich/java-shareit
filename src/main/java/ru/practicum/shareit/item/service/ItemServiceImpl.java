@@ -43,10 +43,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto create(final long userId, final ItemDto itemDto) {
-        User user = userRepository.findById(userId).orElseThrow(() ->
-                new NotFoundException("Пользователя нет")
-        );
-
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
         Item item = itemMapper.toItem(user, itemDto);
         return itemMapper.toItemDto(itemRepository.save(item));
     }
@@ -131,4 +128,5 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
         itemRepository.delete(item);
     }
+
 }
