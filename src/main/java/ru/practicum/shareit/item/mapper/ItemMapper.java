@@ -19,6 +19,8 @@ public class ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
+        itemDto.getLastBooking();
+        itemDto.getNextBooking();
 
         return itemDto;
     }
@@ -30,6 +32,7 @@ public class ItemMapper {
         item.setDescription(itemDto.getDescription());
         item.setOwner(user);
         item.setAvailable(itemDto.getAvailable());
+
 
         return item;
     }
