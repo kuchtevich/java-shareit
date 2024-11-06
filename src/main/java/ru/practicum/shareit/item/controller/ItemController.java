@@ -1,59 +1,75 @@
 package ru.practicum.shareit.item.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.ItemBookingInfoDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.item.dto.CommentDto;
 
 import java.util.List;
 
-@Slf4j
+
 @RestController
+@Slf4j
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
-
     private final ItemService itemService;
 
 
     @PostMapping
-    public ItemDto create(@RequestHeader("X-Sharer-User-Id") Long userId, @Valid @RequestBody ItemDto itemDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ItemDto create(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
+                          @Valid @RequestBody final ItemDto itemDto) {
         log.info("Получили данные для создания предмета {} у пользователя по id {}", itemDto, userId);
         return itemService.create(userId, itemDto);
     }
 
-    @GetMapping("/{item-id}")
-    public ItemDto getById(@PathVariable("item-id") Long itemId) {
-        log.info("Получен запрос на вывод предмета по id {}", itemId);
-        return itemService.getById(itemId);
+    @GetMapping("/{itemId}")
+    public ItemBookingInfoDto getById(@RequestHeader("X-Sharer-User-Id") final long userId,
+                                      @PathVariable @Positive final long itemId) {
+        log.info("Получен запрос на вывод у пользователя по id {} по предмета id {}", userId, itemId);
+        return itemService.getById(userId, itemId);
     }
 
 
-    @PatchMapping("/{item-id}")
-    public ItemDto update(@RequestHeader("X-Sharer-User-Id") Long userId, @PathVariable("item-id") Long itemId, @RequestBody ItemDto itemDto) {
+    @PatchMapping("/{itemId}")
+    public ItemDto update(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
+                          @PathVariable @Positive final long itemId,
+                          @RequestBody final ItemDto itemDto) {
         log.info("Переданы данные на редактировние предмета по id: {}, пользователя по id: {}, данные {}", userId, itemId, itemDto);
         return itemService.update(userId, itemId, itemDto);
     }
 
     @GetMapping
-    public List<ItemDto> getOwnerItems(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") @Positive final long userId) {
         log.info("Получаем список предметов по юзеру с id {}", userId);
-        return itemService.getOwnerItems(userId);
+        return itemService.getAllItems(userId);
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam String text) {
+    public List<ItemDto> search(@RequestParam final String text) {
         log.info("Получили данные для поиска {}", text);
         return itemService.search(text);
+    }
+
+    @DeleteMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable @Positive final Long itemId) {
+        itemService.delete(itemId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto addComments(@RequestHeader("X-Sharer-User-Id") final long userId,
+                                  @PathVariable final long itemId,
+                                  @Valid @RequestBody final CommentDto commentDto) {
+        return itemService.addComments(userId, itemId, commentDto);
     }
 }

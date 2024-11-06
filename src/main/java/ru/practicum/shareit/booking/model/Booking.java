@@ -1,24 +1,30 @@
 package ru.practicum.shareit.booking.model;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.item.model.Item;
-import jdk.jshell.Snippet;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
-@EqualsAndHashCode(exclude = {"id"})
+@Entity
+@Table(name = "bookings")
 public class Booking {
-    @NotNull(message = "Указать id.")
-    private long id;
-    @NotNull(message = "Указать дату начала бронирования.")
-    private LocalDate start;
-    @NotNull(message = "Указать дату конца бронирования.")
-    private LocalDate end;
+    @Id
+    @Column(name = "booking_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "booking_start", nullable = false)
+    private LocalDateTime start;
+    @Column(name = "booking_end", nullable = false)
+    private LocalDateTime end;
+    @JoinColumn(name = "item_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Item item; //вещь которую бронируют
+    @JoinColumn(name = "booker_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User booker; //пользователь который забронировал
-    private Snippet.Status status; //WAITING, APPROVED, REJECTED, CANCELED
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status; //WAITING, APPROVED, REJECTED, CANCELED
 }
