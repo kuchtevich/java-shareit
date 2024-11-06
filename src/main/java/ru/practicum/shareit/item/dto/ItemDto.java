@@ -10,7 +10,7 @@ public class ItemDto {
         private Long id;
         @NotBlank(message = "Указать имя.")
         private String name;
-        @NotNull(message = "Указать подробное описание вещи")
+        @NotBlank(message = "Указать подробное описание вещи")
         private String description;
         @NotNull(message = "Указать статус вещи")
         private Boolean available;

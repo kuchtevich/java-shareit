@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.ItemBookingInfoDto;
@@ -24,21 +25,22 @@ public class ItemController {
 
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ItemDto create(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
                           @Valid @RequestBody final ItemDto itemDto) {
         log.info("Получили данные для создания предмета {} у пользователя по id {}", itemDto, userId);
         return itemService.create(userId, itemDto);
     }
 
-    @GetMapping("/{itemid}")
-    public ItemBookingInfoDto getById(@RequestHeader("X-Sharer-User-Id") final Integer userId,
+    @GetMapping("/{itemId}")
+    public ItemBookingInfoDto getById(@RequestHeader("X-Sharer-User-Id") final long userId,
                                       @PathVariable @Positive final long itemId) {
         log.info("Получен запрос на вывод у пользователя по id {} по предмета id {}", userId, itemId);
         return itemService.getById(userId, itemId);
     }
 
 
-    @PatchMapping("/{itemid}")
+    @PatchMapping("/{itemId}")
     public ItemDto update(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
                           @PathVariable @Positive final long itemId,
                           @RequestBody final ItemDto itemDto) {
@@ -59,6 +61,7 @@ public class ItemController {
     }
 
     @DeleteMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable @Positive final Long itemId) {
         itemService.delete(itemId);
     }

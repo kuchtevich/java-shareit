@@ -55,7 +55,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoTime approval(final Long userId, final Long bookingId, final Boolean approved) {
-        Booking booking = bookingRepository.findByIdAndOwnerId(bookingId, userId).orElseThrow(() -> new NotFoundException("бронирование не найдено"));
+        Booking booking = bookingRepository.findByIdAndOwnerId(bookingId, userId).orElseThrow(() -> new ValidationException("бронирование не найдено"));
         if (!booking.getStatus().equals(Status.WAITING)) {
             throw new NotFoundException("невозможно изменить статус");
         }
