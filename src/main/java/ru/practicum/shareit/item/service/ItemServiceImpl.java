@@ -43,7 +43,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto create(final long userId, final ItemDto itemDto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
+        User user = findUser(userId);
         Item item = itemMapper.toItem(user, itemDto);
         return itemMapper.toItemDto(itemRepository.save(item));
     }
@@ -53,8 +53,7 @@ public class ItemServiceImpl implements ItemService {
         if (userRepository.findById(userId).isEmpty()) {
             throw new NotFoundException("Пользователя нет.");
         }
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
-
+        Item item = findItem(itemId);
         if (!Objects.equals(item.getOwner().getId(), userId)) {
             throw new NotFoundException("Ошибка.");
         }
@@ -73,7 +72,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemBookingInfoDto getById(final long userId, final long itemId) {
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
+        Item item = findItem(itemId);
         List<CommentDto> commentsDto = commentRepository.findAllByItemId(itemId).stream()
                 .map(comment -> commentMapper.toCommentDto(comment)).collect(Collectors.toList());
         ItemBookingInfoDto itemBookingInfoDto = itemMapper.toItemBookingInfoDto(item, commentsDto);
@@ -101,8 +100,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto addComments(final long userId, final long itemId, final CommentDto commentDto) {
-        User owner = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя нет"));
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет"));
+        User owner = findUser(userId);
+        Item item = findItem(itemId);
         if (bookingRepository.findAllByBookerIdAndItemIdAndStatusEqualsAndEndIsBefore(userId, itemId,
                 Status.APPROVED, LocalDateTime.now()).isEmpty()) {
             throw new BadRequestException("Нет бронирований");
@@ -121,12 +120,18 @@ public class ItemServiceImpl implements ItemService {
 
     }
 
-
     @Override
     public void delete(final Long itemId) {
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new NotFoundException("Вещь не найдена."));
+       Item item = findItem(itemId);
         itemRepository.delete(item);
+    }
+
+    private Item findItem(final Long itemId) {
+       return itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет с id " + itemId + "нет"));
+    }
+
+    private User findUser(final Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с id" + userId + "нет"));
     }
 
 }

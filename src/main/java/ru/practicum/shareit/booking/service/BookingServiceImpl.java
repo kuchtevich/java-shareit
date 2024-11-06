@@ -41,9 +41,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDtoTime create(final Long userId, BookingDto bookingDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id = {} не найден" + userId));
-        Item item = itemRepository.findById(bookingDto.getItemId()).orElseThrow(() -> new NotFoundException("Вещи с id = {} нет." + bookingDto.getItemId()));
+        User user = findUser(userId);
+        Item item = itemRepository.findById(bookingDto.getItemId()).orElseThrow(()
+                -> new NotFoundException("Вещи с id = {} нет." + bookingDto.getItemId()));
         if (!item.getAvailable()) {
             throw new ValidationException("Неправильный статус");
         }
@@ -71,7 +71,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDtoTime getById(final Long userId, Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
-                -> new NotFoundException("бронирование с id = {} не найдено" + bookingId));
+                -> new NotFoundException("Бронирование с id = {} не найдено" + bookingId));
         if (!Objects.equals(booking.getItem().getOwner().getId(), userId)
                 && !Objects.equals(booking.getBooker().getId(), userId)) {
             throw new UserNotOwnerException("Пользователь не является хозяином вещи");
@@ -149,8 +149,8 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
-    private void findUser(final Long userId) {
-        userRepository.findById(userId)
+    private User findUser(final Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: " + userId + " не найден."));
     }
 }
