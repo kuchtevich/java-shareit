@@ -1,40 +1,40 @@
 package ru.practicum.shareit.request;
 
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemDtoAnswer;
+import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.service.RequestService;
 
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
-    private RequestService requestServicee;
+    private RequestService requestService;
 
-    @PostMapping("/requestId")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemRequestDto create(@Positive final long requestId,
-                                 @Valid @RequestBody final ItemRequestDto itemRequestDto) {
-
-    }
-
-    @GetMapping("/requestId")
-    @ResponseStatus //описание, дата и время создания
-    public ItemRequestDto answerRequest(@Positive final long requestId, @Valid @RequestBody final long userId) {
+    public ItemDtoAnswer create(@RequestHeader("X-Sharer-User-Id") final long userId,
+                                @RequestBody final ItemRequestDto itemRequestDto) {
+        return requestService.create(userId, itemRequestDto);
 
     }
 
     @GetMapping
-    public List<ItemRequestDto> getAllItems(final long requestId) {
+    @ResponseStatus //описание, дата и время создания
+    public List<ItemDtoAnswer> answerRequestById(@RequestHeader("X-Sharer-User-Id") final long userId) {
+        return requestService.answerRequestbyId(userId);
+    }
 
+    @GetMapping("all")
+    public List<ItemDtoAnswer> getAllRequest(@RequestHeader("X-Sharer-User-Id") final long userId) {
+    return requestService.getAllRequest(userId);
     }
 
     @GetMapping("/{requestId}")
-    public ItemRequestDto getById(final long itemId, final long userId) {
-
+    public ItemDtoAnswer getById(@PathVariable requestId) {
+    return requestService.getById(requestId);
     }
 
 }

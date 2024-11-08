@@ -3,16 +3,24 @@ package ru.practicum.shareit.request.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemDtoRequest;
+import ru.practicum.shareit.request.dto.ItemDtoAnswer;
+import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.mapper.RequestMapper;
+import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.error.NotFoundException;
+import ru.practicum.shareit.user.model.User;
 
 
 import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -20,72 +28,72 @@ import java.util.List;
 public class RequestServiceImpl implements RequestService {
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
-    private final requestMapper requestMapper;
+    private final RequestMapper requestMapper;
     private final UserMapper userMapper;
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
     final Sort sort = Sort.by(Sort.Direction.DESC, "created");
 
     @Override
-    public ItemRequestDto create(final long requestId, final ItemRequestDto itemRequestDto) {
+    public ItemDtoAnswer create(final long userId, final ItemRequestDto itemRequestDto) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: " + userId + " не найден."));
         final ItemRequest itemRequest = itemRequestRepository.save(itemRequestMapper.toItemRequest(itemRequestDto,
                 user));
 
-        final ItemRequestDtoitemRequestDtoO = requestMapper.torequestDto(request);
-        itemRequestDto.setRequester(userMapper.toUserDto(user));
+        final ItemDtoAnswer itemDtoAnswer = requestMapper.toitemRequestDto(itemRequest);
+        itemRequestDto.setRequestor(userMapper.toUserDto(user));
 
         return itemRequestDto;
         }
 
     @Override
-        public ItemRequestDto answerRequestbyId(final long userId) {
-        final List<ItemRequest> itemRequests = requestRepository.findAllByRequesterId(userId, sort);
-        List<ItemRequestDto> responseList = new ArrayList<>();
+    public List<ItemDtoAnswer> answerRequestbyId(final long userId) {
+        final List<ItemRequest> itemRequests = requestRepository.findAllById(userId, sort);
+        List<ItemRequestDto> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
-            ItemRequestDto itemRequestDto = requestMapper.toItemRequestDtoOutput(itemRequest);
+            ItemRequestDto itemRequestDto = requestMapper.ttoItemRequestAnswer(itemRequestDto);
 
-            List<ItemDtoResponseRequest> items = itemRepository.findAllByRequest(itemRequest)
+            List<ItemDtoRequest> items = itemRepository.findAllById(itemRequest)
                     .stream()
-                    .map(itemMapper::toItemDtoResponseRequest)
+                    .map(itemMapper::toItemDtoAnswer)
                     .collect(Collectors.toList());
 
             itemRequestDto.setItems(items);
             itemRequestDto.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
-            responseList.add(itemRequestDtoOutput);
+            answer.add(itemDtoAnswer);
         }
-        return responseList;
+        return answer;
     }
 
     @Override
-    public List<ItemRequestDto> getAllRequest(final long usertId) {
-        final List<ItemRequest> itemRequests = itemRequestRepository.findAllByRequesterIdNot(userId, sort);
-        List<ItemRequestDtoOutput> responselist = new ArrayList<>();
+    public List<ItemDtoAnswer> getAllRequest(final long usertId) {
+        final List<ItemRequest> itemRequests = requestRepository.findAllWithoutId(userId, sort);
+        List<temDtoAnswert> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
-            ItemRequestDtoOutput itemRequestDtoOutput = itemRequestMapper.toItemRequestDtoOutput(itemRequest);
-            itemRequestDtoOutput.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
-            responselist.add(itemRequestDtoOutput);
+            ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
+            itemDtoAnswer.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
+            answer.add(itemDtoAnswer);
         }
 
-        return responselist;
+        return answer;
     }
 
     @Override
-    public ItemRequestDto getById(final long requestId) {
-        final ItemRequest itemRequest = itemRequestRepository.findById(requestId)
+    public ItemDtoAnswer getById(final long requestId) {
+        final ItemRequest itemRequest = requestRepository.findById(requestId)
            .orElseThrow(() -> new NotFoundException("Запрос с id = {} не найден." + requestId));
-        final ItemRequestDtoOutput itemRequestDtoOutput = itemRequestMapper.toItemRequestDtoOutput(itemRequest);
-        final List<ItemDtoResponseRequest> items = itemRepository.findAllByRequest(itemRequest)
+        final ItemDtoAnswer itemDtoAnswer = itemRequestMapper.toItemDtoAnswer(itemRequest);
+        final List<ItemDtoRequest> items = itemRepository.findAllById(itemRequest)
                 .stream()
-                .map(itemMapper::toItemDtoResponseRequest)
+                .map(itemMapper::toItemDtoRequest)
                 .collect(Collectors.toList());
 
-        itemRequestDtoOutput.setItems(items);
-        itemRequestDtoOutput.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
+        itemDtoAnswer.setItems(items);
+        itemDtoAnswer.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
 
-        return itemRequestDtoOutput;
+        return itemDtoAnswer;
     }
 }

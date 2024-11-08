@@ -1,14 +1,15 @@
 package ru.practicum.shareit.request.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemDtoAnswer;
+import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
 @Component
-public class ItemRequestMapper {
+public class RequestMapper {
 
     public ItemRequest toItemRequest(final ItemRequestDto itemRequestDto, final User user) {
 
@@ -21,14 +22,14 @@ public class ItemRequestMapper {
         return itemRequest;
     }
 
-public ItemRequestDto toItemRequestDto(final ItemRequest itemRequest) {
+public ItemDtoAnswer toItemDtoAnswer(final ItemRequest itemRequest) {
 
-    final ItemRequestDto itemRequestDto = new ItemRequestDto();
+    final ItemDtoAnswer itemDtoAnswer = new ItemDtoAnswer();
 
-    itemRequestDto.setId(itemRequest.getId());
-    itemRequestDto.setCreated(itemRequest.getCreated());
-    itemRequestDto.setDescription(itemRequest.getDescription());
+    itemDtoAnswer.setId(itemRequest.getId());
+    itemDtoAnswer.setCreated(itemRequest.getCreated());
+    itemDtoAnswer.setDescription(itemRequest.getDescription());
 
-    return itemRequestDto;
+    return itemDtoAnswer;
 }
 }

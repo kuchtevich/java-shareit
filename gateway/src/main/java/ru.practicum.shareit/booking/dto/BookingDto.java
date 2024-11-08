@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking.dto;
+package src.main.java.ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;

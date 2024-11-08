@@ -1,19 +1,19 @@
-package ru.practicum.shareit.request.service;
+package src.main.java.ru.practicum.shareit.request.service;
 
 
-import ru.practicum.shareit.item.dto.ItemBookingInfoDto;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemDtoAnswer;
+import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.util.List;
 
 public interface RequestService {
 
-    ItemRequestDto create(final long requestId, final ItemRequestDto itemRequestDto);
+    ItemDtoAnswer create(final long userId, final ItemRequestDto itemRequestDto);
 
-    ItemRequestDto answerRequestbyId(final long userId);
+    List<ItemDtoAnswer> answerRequestbyId(final long userId);
 
-    List<ItemRequestDto> getAllRequest(final long usertId);
+    List<ItemDtoAnswer> getAllRequest(final long usertId);
 
-    ItemRequestDto getById(final long requestId);
+    ItemDtoAnswer getById(final long requestId);
 
 }

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.service;
 
 import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.dto.BookingDtoTime;
 import ru.practicum.shareit.booking.model.Status;
 
 import java.util.Collection;

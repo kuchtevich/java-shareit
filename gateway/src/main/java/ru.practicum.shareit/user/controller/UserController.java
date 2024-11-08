@@ -1,14 +1,19 @@
-package ru.practicum.shareit.user.controller;
+package src.main.java.ru.practicum.shareit.user.controller;
+
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.service.UserService;
+
+import src.main.java.ru.practicum.shareit.user.controller.Client;
+import src.main.java.ru.practicum.shareit.user.dto.UserDto;
 
 
 @RestController
@@ -16,33 +21,33 @@ import ru.practicum.shareit.user.service.UserService;
 @RequiredArgsConstructor
 @Validated
 public class UserController {
-    private final UserService userService;
+    private final Client client;
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<Object> getAllUsers() {
+        return client.getAllUsers();
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<Object> getUserById(@PathVariable @Positive final long userId) {
+        return client.getUserById(userId);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@Valid @RequestBody final UserDto userDto) {
-        return userService.createUser(userDto);
+    public ResponseEntity<Object> userCreate(@Valid @RequestBody final UserDto userDto) {
+        return client.create(userDto);
     }
 
     @PatchMapping("/{userId}")
-    public UserDto userUpdate(@PathVariable @Positive final long userId, @RequestBody final UserDto userDto) {
-        return userService.updateUser(userId, userDto);
+    public ResponseEntity<Object> update(@PathVariable @Positive final long userId, @RequestBody final UserDto userDto) {
+        return client.update(userId, userDto);
     }
-
-    @GetMapping("/{userId}")
-    public UserDto getUserById(@PathVariable @Positive final long userId) {
-        return userService.getUserById(userId);
-    }
-
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable @Positive final Long userId) {
-        userService.deleteUser(userId);
+    public void delete(@PathVariable @Positive final Long userId) {
+        client.delete(userId);
     }
+
 }
