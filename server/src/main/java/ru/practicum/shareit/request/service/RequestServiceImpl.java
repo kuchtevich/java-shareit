@@ -49,7 +49,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ItemDtoAnswer> answerRequestbyId(final long userId) {
-        final List<ItemRequest> itemRequests = requestRepository.findAllById(userId, sort);
+        final List<ItemRequest> itemRequests = requestRepository.findAllByRequesterId(userId, sort);
         List<ItemDtoAnswer> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
@@ -70,7 +70,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ItemDtoAnswer> getAllRequest(final long userId) {
-        final List<ItemRequest> itemRequests = requestRepository.findAllWithoutId(userId, sort);
+        final List<ItemRequest> itemRequests = requestRepository.findAllByRequesterIdNot(userId, sort);
         List<ItemDtoAnswer> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
