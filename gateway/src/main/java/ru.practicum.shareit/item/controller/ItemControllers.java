@@ -57,7 +57,7 @@ public class ItemControllers {
         clientItem.itemDelete(itemId);
     }
 
-    @PostMapping("/{itemId}/comment")
+    @PostMapping("/{itemId}/comments")
     public ResponseEntity<Object> addComments(@RequestHeader("X-Sharer-User-Id") final long userId,
                                               @PathVariable final long itemId, @Valid @RequestBody final CommentDtoItem commentDtoItem) {
         return clientItem.addComments(userId, itemId, commentDtoItem);
