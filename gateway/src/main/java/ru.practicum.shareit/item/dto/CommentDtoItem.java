@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class CommentDto {
+public class CommentDtoItem {
     private Long id;
     @NotBlank(message = "Указать текст")
     private String text;

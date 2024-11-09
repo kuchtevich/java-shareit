@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.item.client;
+package ru.practicum.shareit.item.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,12 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import src.main.java.ru.practicum.shareit.item.dto.ItemDto;
-
+import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.item.dto.CommentDtoItem;
+import ru.practicum.shareit.item.dto.ItemsDto;
 import java.util.Map;
 
 @Service
-public class ClientItem {
+public class ClientItem extends BaseClient {
     private static final String API_PREFIX = "/items";
 
     @Autowired
@@ -25,12 +26,12 @@ public class ClientItem {
         );
     }
 
-    public ResponseEntity<Object> create(final long userId, final ItemDto itemDto) {
-        return post("", userId, itemDto);
+    public ResponseEntity<Object> create(final long userId, final ItemsDto itemsDto) {
+        return post("", userId, itemsDto);
     }
 
-    public ResponseEntity<Object> update(final long userId, final long itemId, final ItemDto itemDto) {
-        return patch("/" + userId, itemId, itemDto);
+    public ResponseEntity<Object> update(final long userId, final long itemId, final ItemsDto itemsDto) {
+        return patch("/" + userId, itemId, itemsDto);
     }
 
     public ResponseEntity<Object> getItemById(final long userId, final long itemId) {
@@ -50,7 +51,7 @@ public class ClientItem {
         return get("/search?text={text}", userId, parameters);
     }
 
-    public ResponseEntity<Object> addComments(final long userId, final long itemId, final CommentDto commentDto) {
-        return post("/" + itemId + "/comment", userId, commentDto);
+    public ResponseEntity<Object> addComments(final long userId, final long itemId, final CommentDtoItem commentDtoItem) {
+        return post("/" + itemId + "/comment", userId, commentDtoItem);
     }
 }

@@ -20,6 +20,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.item.model.Item;
 import java.time.LocalDateTime;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.dto.BookingDtoTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;

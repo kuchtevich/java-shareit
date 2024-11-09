@@ -3,7 +3,8 @@ package ru.practicum.shareit.request;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.request.dto.ItemDtoAnswer;
-import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.service.RequestService;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ItemRequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ItemDtoAnswer getById(@PathVariable requestId) {
+    public ItemDtoAnswer getById(@PathVariable final long requestId) {
     return requestService.getById(requestId);
     }
 

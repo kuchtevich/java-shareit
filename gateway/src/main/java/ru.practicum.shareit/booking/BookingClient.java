@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import src.main.java.ru.practicum.shareit.booking.dto.BookingDto;
-import src.main.java.ru.practicum.shareit.client.BaseClient;
-import src.main.java.ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.booking.dto.BookingDtoGate;
+import ru.practicum.shareit.client.*;
+import ru.practicum.shareit.booking.model.Status1;
 
 
 import java.util.Map;
@@ -28,8 +28,8 @@ public class BookingClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> create(final long userId, final BookingDto bookingDto) {
-        return post("", userId, bookingDto);
+    public ResponseEntity<Object> create(final long userId, final BookingDtoGate bookingDtoGate) {
+        return post("", userId, bookingDtoGate);
     }
 
     public ResponseEntity<Object> confirmation(final long userId, final long bookingId, final boolean approved) {
@@ -41,12 +41,12 @@ public class BookingClient extends BaseClient {
         return get("/" + bookingId, userId);
     }
 
-    public ResponseEntity<Object> getAllBookingsFromUser(final long userId, final Status status) {
+    public ResponseEntity<Object> getAllBookingsFromUser(final long userId, final Status1 status) {
         final Map<String, Object> parameters = Map.of("state", status.name());
         return get("?state={state}", userId, parameters);
     }
 
-    public ResponseEntity<Object> getAllBookingsFromOwner(final long userId, final Status status) {
+    public ResponseEntity<Object> getAllBookingsFromOwner(final long userId, final Status1 status) {
         final Map<String, Object> parameters = Map.of("state", status.name());
         return get("/owner?state={state}", userId, parameters);
     }

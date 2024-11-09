@@ -1,16 +1,14 @@
-package src.main.java.ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import ru.practicum.shareit.booking.ValidateTime;
 
 
 import java.time.LocalDateTime;
 
 @Data
-@ValidateTime
-public class BookingDto {
+public class BookingDtoGate {
     @NotBlank(message = "Указать дату начала бронирования")
     @Future(message = "Дата должна быть указана в будущем времени")
     private LocalDateTime start;

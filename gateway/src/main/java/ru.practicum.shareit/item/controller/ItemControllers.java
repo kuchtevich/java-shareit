@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.item.controller;
+package ru.practicum.shareit.item.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -7,12 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import src.main.java.ru.practicum.shareit.item.client.ClientItem;
-import src.main.java.ru.practicum.shareit.item.dto.CommentDto;
-import src.main.java.ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.client.ClientItem;
+import ru.practicum.shareit.item.dto.CommentDtoItem;
+import ru.practicum.shareit.item.dto.ItemsDto;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
 
 
 @RestController
@@ -20,7 +18,7 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @RequestMapping("/items")
-public class ItemController {
+public class ItemControllers {
     private final ClientItem clientItem;
 
 
@@ -37,14 +35,14 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
-                                             @Valid @RequestBody final ItemDto itemDto) {
-        return clientItem.create(userId, itemDto);
+                                             @Valid @RequestBody final ItemsDto itemsDto) {
+        return clientItem.create(userId, itemsDto);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> update(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
-                                             @PathVariable @Positive final long itemId, @RequestBody final ItemDto itemDto) {
-        return clientItem.update(userId, itemId, itemDto);
+                                             @PathVariable @Positive final long itemId, @RequestBody final ItemsDto itemsDto) {
+        return clientItem.update(userId, itemId, itemsDto);
     }
 
     @GetMapping("/search")
@@ -61,7 +59,7 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addComments(@RequestHeader("X-Sharer-User-Id") final long userId,
-                                              @PathVariable final long itemId, @Valid @RequestBody final CommentDto commentDto) {
-        return clientItem.addComments(userId, itemId, commentDto);
+                                              @PathVariable final long itemId, @Valid @RequestBody final CommentDtoItem commentDtoItem) {
+        return clientItem.addComments(userId, itemId, commentDtoItem);
     }
 }

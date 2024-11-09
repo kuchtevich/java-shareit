@@ -1,7 +1,6 @@
-package src.main.java.ru.practicum.shareit.error;
+package ru.practicum.shareit.error;
 
 import lombok.Getter;
-
 
     @Getter
     public class ErrorResponse {

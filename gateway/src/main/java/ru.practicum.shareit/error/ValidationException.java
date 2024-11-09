@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.error;
+package ru.practicum.shareit.error;
 
 public class ValidationException extends RuntimeException {
     public ValidationException(String message) {

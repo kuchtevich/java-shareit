@@ -1,14 +1,13 @@
-package src.main.java.ru.practicum.shareit.request.controller;
+package ru.practicum.shareit.request.controller;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import src.main.java.ru.practicum.shareit.request.client.ClientRequest;
-import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.client.*;
+import ru.practicum.shareit.request.dto.ItemRequestsDto;
 
 @RestController
 @RequestMapping(path = "/requests")
@@ -20,8 +19,8 @@ public class RequestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> itemRequestCreate(@RequestHeader("X-Sharer-User-Id") @NotNull final long userId,
-                                                    @RequestBody final ItemRequestDto itemRequestDto) {
-        return clientRequest.itemRequestCreate(userId, itemRequestDto);
+                                                    @RequestBody final ItemRequestsDto itemRequestsDto) {
+        return clientRequest.itemRequestCreate(userId, itemRequestsDto);
     }
 
     @GetMapping
@@ -35,7 +34,7 @@ public class RequestController {
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> getRequestById(@PathVariable final long requestId) {
-        return clientRequest.getRequestById(requestId);
+    public ResponseEntity<Object> getById(@PathVariable final long requestId) {
+        return clientRequest.getById(requestId);
     }
 }

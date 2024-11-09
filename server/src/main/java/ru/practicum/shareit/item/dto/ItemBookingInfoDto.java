@@ -14,7 +14,7 @@ public class ItemBookingInfoDto {
     private String description;
     private Boolean available;
     private String ownerName;
-    private List<CommentDto> comments = new ArrayList<>();
+    private List<CommentDto> comment = new ArrayList<>();
     private LocalDateTime lastBooking;
     private LocalDateTime nextBooking;
 }

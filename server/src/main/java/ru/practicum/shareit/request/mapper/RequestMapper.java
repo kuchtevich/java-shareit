@@ -2,7 +2,7 @@ package ru.practicum.shareit.request.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.request.dto.ItemDtoAnswer;
-import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
@@ -17,7 +17,7 @@ public class RequestMapper {
 
         itemRequest.setDescription(itemRequestDto.getDescription());
         itemRequest.setCreated(LocalDateTime.now());
-        itemRequest.setRequestor(user);
+        itemRequest.setRequester(user);
 
         return itemRequest;
     }

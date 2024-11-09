@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.ItemDtoRequest;
 import ru.practicum.shareit.request.dto.ItemDtoAnswer;
-import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.mapper.RequestMapper;
 import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -38,39 +38,40 @@ public class RequestServiceImpl implements RequestService {
     public ItemDtoAnswer create(final long userId, final ItemRequestDto itemRequestDto) {
         final User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id: " + userId + " не найден."));
-        final ItemRequest itemRequest = itemRequestRepository.save(itemRequestMapper.toItemRequest(itemRequestDto,
+        final ItemRequest itemRequest = requestRepository.save(requestMapper.toItemRequest(itemRequestDto,
                 user));
 
-        final ItemDtoAnswer itemDtoAnswer = requestMapper.toitemRequestDto(itemRequest);
-        itemRequestDto.setRequestor(userMapper.toUserDto(user));
+        final ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
+        itemDtoAnswer.setRequester(userMapper.toUserDto(user));
 
-        return itemRequestDto;
-        }
+        return itemDtoAnswer;
+    }
 
     @Override
     public List<ItemDtoAnswer> answerRequestbyId(final long userId) {
         final List<ItemRequest> itemRequests = requestRepository.findAllById(userId, sort);
-        List<ItemRequestDto> answer = new ArrayList<>();
+        List<ItemDtoAnswer> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
-            ItemRequestDto itemRequestDto = requestMapper.ttoItemRequestAnswer(itemRequestDto);
+            ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
 
-            List<ItemDtoRequest> items = itemRepository.findAllById(itemRequest)
+            List<ItemDtoRequest> items = itemRepository.findAllByRequest(itemRequest)
                     .stream()
-                    .map(itemMapper::toItemDtoAnswer)
+                    .map(itemMapper::toItemDtoRequest)
                     .collect(Collectors.toList());
 
-            itemRequestDto.setItems(items);
-            itemRequestDto.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
+            itemDtoAnswer.setItems(items);
+            itemDtoAnswer.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
             answer.add(itemDtoAnswer);
         }
+
         return answer;
     }
 
     @Override
-    public List<ItemDtoAnswer> getAllRequest(final long usertId) {
+    public List<ItemDtoAnswer> getAllRequest(final long userId) {
         final List<ItemRequest> itemRequests = requestRepository.findAllWithoutId(userId, sort);
-        List<temDtoAnswert> answer = new ArrayList<>();
+        List<ItemDtoAnswer> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
             ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
@@ -84,9 +85,9 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public ItemDtoAnswer getById(final long requestId) {
         final ItemRequest itemRequest = requestRepository.findById(requestId)
-           .orElseThrow(() -> new NotFoundException("Запрос с id = {} не найден." + requestId));
-        final ItemDtoAnswer itemDtoAnswer = itemRequestMapper.toItemDtoAnswer(itemRequest);
-        final List<ItemDtoRequest> items = itemRepository.findAllById(itemRequest)
+                .orElseThrow(() -> new NotFoundException("Запрос с id = {} не найден." + requestId));
+        final ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
+        final List<ItemDtoRequest> items = itemRepository.findAllByRequest(itemRequest)
                 .stream()
                 .map(itemMapper::toItemDtoRequest)
                 .collect(Collectors.toList());
@@ -96,4 +97,4 @@ public class RequestServiceImpl implements RequestService {
 
         return itemDtoAnswer;
     }
-}
+    }

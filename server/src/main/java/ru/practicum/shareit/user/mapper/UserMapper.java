@@ -10,13 +10,13 @@ import java.util.ArrayList;
 @Component
 public class UserMapper {
     public UserDto toUserDto(final User user) {
-        final UserDto userDto = new UserDto();
+        final UserDto usersDto = new UserDto();
 
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
+        usersDto.setId(user.getId());
+        usersDto.setName(user.getName());
+        usersDto.setEmail(user.getEmail());
 
-        return userDto;
+        return usersDto;
     }
 
     public User toUser(final UserDto userDto) {

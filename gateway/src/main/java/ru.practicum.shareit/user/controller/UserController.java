@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.user.controller;
+package ru.practicum.shareit.user.controller;
 
 
 import jakarta.validation.Valid;
@@ -12,8 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import src.main.java.ru.practicum.shareit.user.controller.Client;
-import src.main.java.ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.controller.Client;
+import ru.practicum.shareit.user.dto.UsersDto;
 
 
 @RestController
@@ -35,13 +35,13 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> userCreate(@Valid @RequestBody final UserDto userDto) {
-        return client.create(userDto);
+    public ResponseEntity<Object> userCreate(@Valid @RequestBody final UsersDto usersDto) {
+        return client.create(usersDto);
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> update(@PathVariable @Positive final long userId, @RequestBody final UserDto userDto) {
-        return client.update(userId, userDto);
+    public ResponseEntity<Object> update(@PathVariable @Positive final long userId, @RequestBody final UsersDto usersDto) {
+        return client.update(userId, usersDto);
     }
 
     @DeleteMapping("/{userId}")

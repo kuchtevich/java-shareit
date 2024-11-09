@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.request.client;
+package ru.practicum.shareit.request.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,11 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import src.main.java.ru.practicum.shareit.client.BaseClient;
-import src.main.java.ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.request.dto.ItemRequestsDto;
 
-
-import static org.springframework.http.RequestEntity.post;
 
 @Service
 public class ClientRequest extends BaseClient {
@@ -27,8 +25,8 @@ public class ClientRequest extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> itemRequestCreate(final long userId, final ItemRequestDto itemRequestDto) {
-        return post("", userId, itemRequestDto);
+    public ResponseEntity<Object> itemRequestCreate(final long userId, final ItemRequestsDto itemRequestsDto) {
+        return post("", userId, itemRequestsDto);
     }
 
     public ResponseEntity<Object> getAllRequestByUser(final long userId) {
@@ -39,7 +37,7 @@ public class ClientRequest extends BaseClient {
         return get("/all", userId);
     }
 
-    public ResponseEntity<Object> getRequestById(final long requestId) {
+    public ResponseEntity<Object> getById(final long requestId) {
         return get("/" + requestId);
     }
 }

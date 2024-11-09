@@ -1,4 +1,4 @@
-package src.main.java.ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import lombok.Data;
 
 
 @Data
-public class ItemDto {
+public class ItemsDto {
         private Long id;
         @NotBlank(message = "Указать имя.")
         private String name;
