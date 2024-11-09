@@ -87,7 +87,6 @@ public class ItemServiceImpl implements ItemService {
                     LocalDateTime.now(), List.of(Status.APPROVED));
             itemBookingInfoDto.setNextBooking(future == null ? null : future.get().getStart());
         }
-        log.info("Вещь с id {} успешно получена.", itemId);
         return itemBookingInfoDto;
     }
 
