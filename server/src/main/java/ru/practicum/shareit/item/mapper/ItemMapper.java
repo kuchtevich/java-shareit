@@ -56,7 +56,7 @@ public class ItemMapper {
         itemBookingInfoDto.setName(item.getName());
         itemBookingInfoDto.setDescription(item.getDescription());
         itemBookingInfoDto.setAvailable(item.getAvailable());
-        itemBookingInfoDto.setComment(comments);
+        itemBookingInfoDto.setComments(comments);
 
         return itemBookingInfoDto;
     }
