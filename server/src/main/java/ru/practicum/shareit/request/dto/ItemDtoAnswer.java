@@ -13,7 +13,7 @@ public class ItemDtoAnswer {
 
     private String description;
 
-    private UserDto requester;
+    private UserDto requestor;
 
     private LocalDateTime created;
 

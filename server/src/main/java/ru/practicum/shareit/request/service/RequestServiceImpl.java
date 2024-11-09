@@ -42,14 +42,14 @@ public class RequestServiceImpl implements RequestService {
                 user));
 
         final ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
-        itemDtoAnswer.setRequester(userMapper.toUserDto(user));
+        itemDtoAnswer.setRequestor(userMapper.toUserDto(user));
 
         return itemDtoAnswer;
     }
 
     @Override
     public List<ItemDtoAnswer> answerRequestbyId(final long userId) {
-        final List<ItemRequest> itemRequests = requestRepository.findAllByRequesterId(userId, sort);
+        final List<ItemRequest> itemRequests = requestRepository.findAllByRequestorId(userId, sort);
         List<ItemDtoAnswer> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
@@ -61,7 +61,7 @@ public class RequestServiceImpl implements RequestService {
                     .collect(Collectors.toList());
 
             itemDtoAnswer.setItems(items);
-            itemDtoAnswer.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
+            itemDtoAnswer.setRequestor(userMapper.toUserDto(itemRequest.getRequestor()));
             answer.add(itemDtoAnswer);
         }
 
@@ -70,12 +70,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ItemDtoAnswer> getAllRequest(final long userId) {
-        final List<ItemRequest> itemRequests = requestRepository.findAllByRequesterIdNot(userId, sort);
+        final List<ItemRequest> itemRequests = requestRepository.findAllByRequestorIdNot(userId, sort);
         List<ItemDtoAnswer> answer = new ArrayList<>();
 
         for (ItemRequest itemRequest : itemRequests) {
             ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
-            itemDtoAnswer.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
+            itemDtoAnswer.setRequestor(userMapper.toUserDto(itemRequest.getRequestor()));
             answer.add(itemDtoAnswer);
         }
 
@@ -93,7 +93,7 @@ public class RequestServiceImpl implements RequestService {
                 .collect(Collectors.toList());
 
         itemDtoAnswer.setItems(items);
-        itemDtoAnswer.setRequester(userMapper.toUserDto(itemRequest.getRequester()));
+        itemDtoAnswer.setRequestor(userMapper.toUserDto(itemRequest.getRequestor()));
 
         return itemDtoAnswer;
     }

@@ -17,7 +17,7 @@ public class RequestMapper {
 
         itemRequest.setDescription(itemRequestDto.getDescription());
         itemRequest.setCreated(LocalDateTime.now());
-        itemRequest.setRequester(user);
+        itemRequest.setRequestor(user);
 
         return itemRequest;
     }

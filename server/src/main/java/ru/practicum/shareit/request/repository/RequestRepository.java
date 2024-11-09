@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface RequestRepository extends JpaRepository<ItemRequest, Long> {
-    List<ItemRequest> findAllByRequesterId(final long requesterId, Sort sort);
+    List<ItemRequest> findAllByRequestorId(final long requestorId, Sort sort);
 
-    List<ItemRequest> findAllByRequesterIdNot(final long requesterId, Sort sort);
+    List<ItemRequest> findAllByRequestorIdNot(final long requestorId, Sort sort);
 }
