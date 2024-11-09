@@ -74,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemBookingInfoDto getById(final long userId, final long itemId) {
-        Item item = findItem(itemId);
+        final Item item = findItem(itemId);
         List<CommentDto> commentsDto = commentRepository.findAllByItemId(itemId).stream()
                 .map(comment -> commentMapper.toCommentDto(comment)).collect(Collectors.toList());
         ItemBookingInfoDto itemBookingInfoDto = itemMapper.toItemBookingInfoDto(item, commentsDto);
@@ -87,7 +87,7 @@ public class ItemServiceImpl implements ItemService {
                     LocalDateTime.now(), List.of(Status.APPROVED));
             itemBookingInfoDto.setNextBooking(future == null ? null : future.get().getStart());
         }
-
+        log.info("Вещь с id {} успешно получена.", itemId);
         return itemBookingInfoDto;
     }
 
