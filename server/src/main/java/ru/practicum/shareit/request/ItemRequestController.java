@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
 public class ItemRequestController {
-    private RequestService requestService;
+    private final RequestService requestService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -24,12 +24,11 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    @ResponseStatus //описание, дата и время создания
     public List<ItemDtoAnswer> answerRequestById(@RequestHeader("X-Sharer-User-Id") final long userId) {
         return requestService.answerRequestbyId(userId);
     }
 
-    @GetMapping("all")
+    @GetMapping("/all")
     public List<ItemDtoAnswer> getAllRequest(@RequestHeader("X-Sharer-User-Id") final long userId) {
     return requestService.getAllRequest(userId);
     }
