@@ -16,6 +16,7 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.booking.model.Status;
@@ -40,6 +41,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
 
     private final CommentMapper commentMapper;
+    private final RequestRepository requestRepository;
 
     @Override
     public ItemDto create(final long userId, final ItemDto itemDto) {
