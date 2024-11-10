@@ -45,7 +45,7 @@ public class ItemServiceImpl implements ItemService {
     private final RequestRepository requestRepository;
 
     @Override
-    public ItemDto create(final long userId,final ItemDto itemDto){
+    public ItemDto create(final long userId,final ItemDto itemDto) {
         User user = findUser(userId);
         Item item = itemMapper.toItem(user, itemDto);
         System.out.println();
