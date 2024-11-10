@@ -10,7 +10,6 @@ import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Objects;
 
 @Component
 public class ItemMapper {
@@ -21,9 +20,8 @@ public class ItemMapper {
         itemDto.setName(item.getName());
         itemDto.setDescription(item.getDescription());
         itemDto.setAvailable(item.getAvailable());
-        if (Objects.nonNull(item.getRequest())) {
-            itemDto.setRequestId(item.getRequest().getId());
-        }
+        itemDto.getLastBooking();
+        itemDto.getNextBooking();
 
         return itemDto;
     }
