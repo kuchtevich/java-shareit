@@ -48,9 +48,9 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto create(final long userId, final ItemDto itemDto) {
         User user = findUser(userId);
         Item item = itemMapper.toItem(user, itemDto);
-        ItemRequest itemRequest = null;
+        System.out.println();
         if (itemDto.getRequestId() != null) {
-            itemRequest = requestRepository.findById(itemDto.getRequestId())
+            ItemRequest itemRequest = requestRepository.findById(itemDto.getRequestId())
                     .orElseThrow(() -> new NotFoundException("Запрос не найден."));
                             item.setRequest(itemRequest);
         }
