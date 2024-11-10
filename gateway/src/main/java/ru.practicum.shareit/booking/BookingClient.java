@@ -10,7 +10,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.booking.dto.BookingDtoGate;
 import ru.practicum.shareit.client.*;
 import ru.practicum.shareit.booking.model.Status1;
-
+//
 
 import java.util.Map;
 @Service
