@@ -22,14 +22,14 @@ public class RequestMapper {
         return itemRequest;
     }
 
-public ItemDtoAnswer toItemDtoAnswer(final ItemRequest itemRequest) {
+    public ItemDtoAnswer toItemDtoAnswer(final ItemRequest itemRequest) {
 
-    final ItemDtoAnswer itemDtoAnswer = new ItemDtoAnswer();
+        final ItemDtoAnswer itemDtoAnswer = new ItemDtoAnswer();
 
-    itemDtoAnswer.setId(itemRequest.getId());
-    itemDtoAnswer.setCreated(itemRequest.getCreated());
-    itemDtoAnswer.setDescription(itemRequest.getDescription());
+        itemDtoAnswer.setId(itemRequest.getId());
+        itemDtoAnswer.setCreated(itemRequest.getCreated());
+        itemDtoAnswer.setDescription(itemRequest.getDescription());
 
-    return itemDtoAnswer;
-}
+        return itemDtoAnswer;
+    }
 }
