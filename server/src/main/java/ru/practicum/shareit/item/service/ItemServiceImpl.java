@@ -130,7 +130,7 @@ public class ItemServiceImpl implements ItemService {
     private Item findItem(final Long itemId) {
        return itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет с id " + itemId + "нет"));
     }
-
+//kmlk
     private User findUser(final Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с id" + userId + "нет"));
     }
