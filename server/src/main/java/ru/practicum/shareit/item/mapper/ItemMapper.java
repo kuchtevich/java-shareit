@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.mapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemBookingInfoDto;
+import ru.practicum.shareit.item.dto.ItemDtoRequest;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.model.User;
@@ -58,5 +59,17 @@ public class ItemMapper {
         itemBookingInfoDto.setComments(comments);
 
         return itemBookingInfoDto;
+    }
+
+    public ItemDtoRequest toItemDtoRequest(Item item) {
+
+        final ItemDtoRequest itemDtoRequest = new ItemDtoRequest();
+
+        itemDtoRequest.setItemId(item.getId());
+        itemDtoRequest.setOwnerId(item.getOwner().getId());
+        itemDtoRequest.setName(item.getName());
+
+        return itemDtoRequest;
+
     }
 }
