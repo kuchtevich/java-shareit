@@ -64,11 +64,11 @@ public class RequestServiceImpl implements RequestService {
             itemDtoAnswer.setRequestor(userMapper.toUserDto(itemRequest.getRequestor()));
             answer.add(itemDtoAnswer);
         }
-
         return answer;
     }
 
-    @Override
+
+        @Override
     public List<ItemDtoAnswer> getAllRequest(final long userId) {
         final List<ItemRequest> itemRequests = requestRepository.findAllByRequestorIdNot(userId, sort);
         List<ItemDtoAnswer> answer = new ArrayList<>();
@@ -87,7 +87,7 @@ public class RequestServiceImpl implements RequestService {
         final ItemRequest itemRequest = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос с id = {} не найден." + requestId));
         final ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
-        final List<ItemDtoRequest> items = itemRepository.findAllByRequest(itemRequest)
+        final List<ItemDtoRequest> items = itemRepository.findAllByRequestId(itemRequest.getId())
                 .stream()
                 .map(itemMapper::toItemDtoRequest)
                 .collect(Collectors.toList());
@@ -97,4 +97,4 @@ public class RequestServiceImpl implements RequestService {
 
         return itemDtoAnswer;
     }
-    }
+}
