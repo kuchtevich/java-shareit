@@ -21,20 +21,20 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") final Long userId,
-                                                @RequestBody final BookingDtoGate bookingDto) {
+                                         @RequestBody final BookingDtoGate bookingDto) {
         return bookingClient.create(userId, bookingDto);
     }
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> confirmation(@RequestHeader("X-Sharer-User-Id") final Long userId,
-                                                      @PathVariable final Long bookingId,
-                                                      @RequestParam final Boolean approved) {
+                                               @PathVariable final Long bookingId,
+                                               @RequestParam final Boolean approved) {
         return bookingClient.confirmation(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getById(@RequestHeader("X-Sharer-User-Id") final Long userId,
-                                                 @PathVariable final Long bookingId) {
+                                          @PathVariable final Long bookingId) {
         return bookingClient.getById(userId, bookingId);
     }
 
