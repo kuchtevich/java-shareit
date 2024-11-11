@@ -30,12 +30,12 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public List<ItemDtoAnswer> getAllRequest(@RequestHeader("X-Sharer-User-Id") final long userId) {
-    return requestService.getAllRequest(userId);
+        return requestService.getAllRequest(userId);
     }
 
     @GetMapping("/{requestId}")
     public ItemDtoAnswer getById(@PathVariable final long requestId) {
-    return requestService.getById(requestId);
+        return requestService.getById(requestId);
     }
 
 }

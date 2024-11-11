@@ -16,6 +16,8 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.booking.model.Status;
@@ -40,11 +42,18 @@ public class ItemServiceImpl implements ItemService {
     private final ItemMapper itemMapper;
 
     private final CommentMapper commentMapper;
+    private final RequestRepository requestRepository;
 
     @Override
     public ItemDto create(final long userId, final ItemDto itemDto) {
         User user = findUser(userId);
         Item item = itemMapper.toItem(user, itemDto);
+        System.out.println();
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = requestRepository.findById(itemDto.getRequestId())
+                    .orElseThrow(() -> new NotFoundException("Запрос не найден"));
+            item.setRequest(itemRequest);
+        }
         return itemMapper.toItemDto(itemRepository.save(item));
     }
 
@@ -72,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemBookingInfoDto getById(final long userId, final long itemId) {
-        Item item = findItem(itemId);
+        final Item item = findItem(itemId);
         List<CommentDto> commentsDto = commentRepository.findAllByItemId(itemId).stream()
                 .map(comment -> commentMapper.toCommentDto(comment)).collect(Collectors.toList());
         ItemBookingInfoDto itemBookingInfoDto = itemMapper.toItemBookingInfoDto(item, commentsDto);
@@ -85,7 +94,6 @@ public class ItemServiceImpl implements ItemService {
                     LocalDateTime.now(), List.of(Status.APPROVED));
             itemBookingInfoDto.setNextBooking(future == null ? null : future.get().getStart());
         }
-
         return itemBookingInfoDto;
     }
 
@@ -122,12 +130,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void delete(final Long itemId) {
-       Item item = findItem(itemId);
+        Item item = findItem(itemId);
         itemRepository.delete(item);
     }
 
     private Item findItem(final Long itemId) {
-       return itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет с id " + itemId + "нет"));
+        return itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Вещи нет с id " + itemId + "нет"));
     }
 
     private User findUser(final Long userId) {

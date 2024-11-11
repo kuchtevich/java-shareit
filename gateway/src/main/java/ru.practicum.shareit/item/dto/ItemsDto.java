@@ -14,5 +14,5 @@ public class ItemsDto {
         private String description;
         @NotNull(message = "Указать статус вещи")
         private Boolean available;
-        private Long requestorId;
+        private Long requestId;
 }

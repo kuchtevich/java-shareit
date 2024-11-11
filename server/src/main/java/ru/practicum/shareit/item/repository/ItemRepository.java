@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
 
+//
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -19,5 +20,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             """)
     List<Item> search(final String text);
 
-    List<Item> findAllByRequest(final ItemRequest request);
+    List<Item> findAllByRequestId(final Long requestId);
+
+    List<Item> findAllByRequest(ItemRequest itemRequest);
 }

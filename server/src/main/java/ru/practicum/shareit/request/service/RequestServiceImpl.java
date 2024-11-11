@@ -87,7 +87,7 @@ public class RequestServiceImpl implements RequestService {
         final ItemRequest itemRequest = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос с id = {} не найден." + requestId));
         final ItemDtoAnswer itemDtoAnswer = requestMapper.toItemDtoAnswer(itemRequest);
-        final List<ItemDtoRequest> items = itemRepository.findAllByRequest(itemRequest)
+        final List<ItemDtoRequest> items = itemRepository.findAllByRequestId(itemRequest.getId())
                 .stream()
                 .map(itemMapper::toItemDtoRequest)
                 .collect(Collectors.toList());
@@ -97,4 +97,4 @@ public class RequestServiceImpl implements RequestService {
 
         return itemDtoAnswer;
     }
-    }
+}
