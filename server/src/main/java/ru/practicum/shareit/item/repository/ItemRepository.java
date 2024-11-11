@@ -21,3 +21,4 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     List<Item> findAllByRequest(final ItemRequest request);
 }
+//
