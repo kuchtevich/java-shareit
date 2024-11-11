@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
 
-//
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {

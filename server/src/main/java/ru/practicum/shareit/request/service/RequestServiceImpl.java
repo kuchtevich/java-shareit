@@ -64,11 +64,11 @@ public class RequestServiceImpl implements RequestService {
             itemDtoAnswer.setRequestor(userMapper.toUserDto(itemRequest.getRequestor()));
             answer.add(itemDtoAnswer);
         }
-
         return answer;
     }
 
-    @Override
+
+        @Override
     public List<ItemDtoAnswer> getAllRequest(final long userId) {
         final List<ItemRequest> itemRequests = requestRepository.findAllByRequestorIdNot(userId, sort);
         List<ItemDtoAnswer> answer = new ArrayList<>();
