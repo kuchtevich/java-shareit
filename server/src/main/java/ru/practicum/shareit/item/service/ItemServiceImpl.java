@@ -142,5 +142,5 @@ public class ItemServiceImpl implements ItemService {
     private User findUser(final Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователя с id" + userId + "нет"));
     }
-
+//
 }
