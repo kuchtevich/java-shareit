@@ -35,19 +35,19 @@ public class ItemControllers {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
-                                             @Valid @RequestBody final ItemsDto itemsDto) {
+                                         @Valid @RequestBody final ItemsDto itemsDto) {
         return clientItem.create(userId, itemsDto);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> update(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
-                                             @PathVariable @Positive final long itemId, @RequestBody final ItemsDto itemsDto) {
+                                         @PathVariable @Positive final long itemId, @RequestBody final ItemsDto itemsDto) {
         return clientItem.update(userId, itemId, itemsDto);
     }
 
     @GetMapping("/search")
     public ResponseEntity<Object> search(@RequestHeader("X-Sharer-User-Id") @Positive final long userId,
-                                             @RequestParam(required = false) final String text) {
+                                         @RequestParam(required = false) final String text) {
         return clientItem.search(userId, text);
     }
 
@@ -57,7 +57,7 @@ public class ItemControllers {
         clientItem.itemDelete(itemId);
     }
 
-    @PostMapping("/{itemId}/comments")
+    @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addComments(@RequestHeader("X-Sharer-User-Id") final long userId,
                                               @PathVariable final long itemId, @Valid @RequestBody final CommentDtoItem commentDtoItem) {
         return clientItem.addComments(userId, itemId, commentDtoItem);
