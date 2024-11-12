@@ -10,6 +10,8 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.item.dto.CommentDtoItem;
 import ru.practicum.shareit.item.dto.ItemsDto;
+import org.springframework.http.HttpStatus;
+
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.*;
@@ -50,12 +52,15 @@ public class ClientItem extends BaseClient {
     }
 
     public ResponseEntity<Object> search(final long userId, final String text) {
-               if (text.isEmpty()) {
-            return new Collections.EmptyList<>();
+        ArrayList<Object> objects = new ArrayList<>();
+        if (text.isEmpty()) {
+            return new ResponseEntity<>(objects, HttpStatus.OK);
         }
-        Map<String, Object> parameters = Map.of("text", text);
-        return get("/search?text={text}", userId, parameters);
+        Map<String, Object> params = Map.of("text", text);
+        return get("/search?text={text}", userId, params);
+
     }
+
 
     public ResponseEntity<Object> addComments(final long userId, final long itemId, final CommentDtoItem commentDtoItem) {
         return post("/" + itemId + "/comment", userId, commentDtoItem);
