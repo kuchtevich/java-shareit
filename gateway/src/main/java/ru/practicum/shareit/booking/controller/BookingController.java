@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDtoGate;
-import ru.practicum.shareit.booking.model.Status1;
+import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.BookingClient;
 
 
@@ -40,14 +40,14 @@ public class BookingController {
 
     @GetMapping
     public ResponseEntity<Object> getAllBookingsFromUser(@RequestHeader("X-Sharer-User-Id") final Long userId,
-                                                         @RequestParam(defaultValue = "ALL") final Status1 status) {
-        return bookingClient.getAllBookingsFromUser(userId, status);
+                                                         @RequestParam(defaultValue = "ALL") final State state) {
+        return bookingClient.getAllBookingsFromUser(userId, state);
     }
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getAllBookingsFromOwner(@RequestHeader("X-Sharer-User-Id") final Long userId,
-                                                          @RequestParam(defaultValue = "ALL") final Status1 status) {
-        return bookingClient.getAllBookingsFromOwner(userId, status);
+                                                          @RequestParam(defaultValue = "ALL") final State state) {
+        return bookingClient.getAllBookingsFromOwner(userId, state);
     }
 
 

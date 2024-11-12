@@ -54,6 +54,7 @@ public class ItemServiceImpl implements ItemService {
                     .orElseThrow(() -> new NotFoundException("Запрос не найден"));
             item.setRequest(itemRequest);
         }
+        log.info("Вещь с id {} добавлена.", item.getId());
         return itemMapper.toItemDto(itemRepository.save(item));
     }
 
@@ -76,6 +77,7 @@ public class ItemServiceImpl implements ItemService {
         if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }
+        log.info("Вещь с id {} обновлена.", item.getId());
         return itemMapper.toItemDto(itemRepository.save(item));
     }
 
@@ -94,6 +96,7 @@ public class ItemServiceImpl implements ItemService {
                     LocalDateTime.now(), List.of(Status.APPROVED));
             itemBookingInfoDto.setNextBooking(future == null ? null : future.get().getStart());
         }
+        log.info("Вещь с id {} получена.", itemId);
         return itemBookingInfoDto;
     }
 
@@ -103,6 +106,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("Пользователя нет.");
         }
         List<Item> items = itemRepository.findAllByOwnerId(userId);
+        log.info("Получение списка всех вещей пользователя.");
         return itemMapper.toListDto(items);
     }
 
@@ -116,14 +120,13 @@ public class ItemServiceImpl implements ItemService {
         }
         final Comment comment = commentMapper.toComment(commentDto, owner, item);
         commentRepository.save(comment);
+        log.info("Пользователь с id {} оставил комментарий к вещи с id {}.", userId, itemId);
         return commentMapper.toCommentDto(comment);
     }
 
     @Override
     public List<ItemDto> search(final String text) {
-        if (text.isEmpty()) {
-            return new ArrayList<>();
-        }
+        log.info("Получение списка вещей {}.", text);
         return itemRepository.search(text.trim().toLowerCase()).stream().map(itemMapper::toItemDto).toList();
 
     }
@@ -131,6 +134,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void delete(final Long itemId) {
         Item item = findItem(itemId);
+        log.info("Вещь с id {} удалена.", itemId);
         itemRepository.delete(item);
     }
 
